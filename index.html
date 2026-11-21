@@ -18,20 +18,16 @@
   --radius:14px;--font:'Noto Nastaliq Urdu',serif;
 }
 *{font-family:'Noto Nastaliq Urdu',serif}
-/* اردو متن ہمیشہ Nastaliq میں */
 .bismillah, .logo-title, .logo-sub,
 [lang="ur"] .bismillah, [lang="en"] .bismillah{
   font-family:'Noto Nastaliq Urdu',serif !important
 }
-/* Numbers */
 .stat-num, .fee-amount, #dash-days, #dash-staff,
 #adm-total, #adm-active{
   font-family:'Playfair Display',serif
 }
 html,body{height:100%;overflow-x:hidden;background:var(--bg1);color:var(--text)}
 body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
-
-/* BG */
 #stars-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
 .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(ellipse 80% 50% at 20% 10%,rgba(30,60,140,.38) 0%,transparent 60%),
@@ -39,26 +35,18 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
   radial-gradient(ellipse 40% 30% at 50% 50%,rgba(10,40,100,.22) 0%,transparent 70%);
   animation:auroraMove 12s ease-in-out infinite alternate}
 @keyframes auroraMove{0%{opacity:.6;transform:scale(1)}100%{opacity:1;transform:scale(1.07)}}
-
-/* SCREENS */
 .screen{display:none;position:relative;z-index:2;min-height:100vh;
   flex-direction:column;align-items:center;justify-content:center;padding:20px 16px}
 .screen.active{display:flex}
-
-/* LANG BAR - global */
 .lang-bar{position:fixed;top:env(safe-area-inset-top,8px);left:12px;z-index:50}
 .lang-btn{background:rgba(232,200,106,0.12);border:1px solid rgba(232,200,106,0.3);
   color:var(--gold);padding:6px 14px;border-radius:30px;font-size:12px;cursor:pointer;
   transition:.2s;backdrop-filter:blur(8px)}
 .lang-btn:hover{background:rgba(232,200,106,0.22)}
-
-/* CARD */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
   padding:22px;width:100%;max-width:400px;
   backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
   box-shadow:0 8px 40px rgba(0,0,0,.55),0 0 0 1px rgba(232,200,106,.06)}
-
-/* LOGO */
 .logo-wrap{text-align:center;margin-bottom:24px;animation:fadeDown .5s ease both}
 .logo-icon{font-size:50px;display:block;margin-bottom:6px;
   filter:drop-shadow(0 0 18px rgba(232,200,106,.5))}
@@ -67,8 +55,6 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
 .logo-sub{font-size:13px;color:var(--text2);margin-top:3px}
 .bismillah{font-size:15px;color:var(--gold2);text-align:center;margin-bottom:5px;
   opacity:.85;text-shadow:0 0 10px rgba(232,200,106,.3)}
-
-/* FIELD */
 .field{margin-bottom:13px}
 .field label{display:block;font-size:13px;color:var(--text2);margin-bottom:5px}
 .pass-wrap{position:relative;display:flex;align-items:center}
@@ -84,7 +70,6 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
 .eye-lid-top{fill:#a090c0;transform-origin:center 10px;transition:transform .35s cubic-bezier(.4,0,.2,1)}
 .eye-lid-bot{fill:#a090c0;transform-origin:center 14px;transition:transform .35s cubic-bezier(.4,0,.2,1)}
 .eye-outline{fill:none;stroke:#e8c86a;stroke-width:1.2;transition:all .35s ease}
-/* closed state */
 .eye-btn.eye-closed .eye-lid-top{transform:translateY(4px)}
 .eye-btn.eye-closed .eye-lid-bot{transform:translateY(-4px)}
 .eye-btn.eye-closed .eye-iris{opacity:0}
@@ -96,8 +81,6 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
   outline:none;transition:.2s;direction:rtl;backdrop-filter:blur(4px)}
 .field input:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(232,200,106,.12)}
 .field input::placeholder{color:var(--text2)}
-
-/* BTN */
 .btn{width:100%;padding:13px;border:none;border-radius:10px;font-size:15px;
   font-weight:600;cursor:pointer;transition:.18s;margin-bottom:9px;position:relative;overflow:hidden}
 .btn:active{transform:scale(.97)}
@@ -112,16 +95,12 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
 .btn-outline:hover{border-color:var(--gold);color:var(--gold)}
 .btn-sm{padding:7px 13px;font-size:12px;width:auto;margin:0}
 .divider{border:none;border-top:1px solid var(--border);margin:12px 0}
-
-/* TOAST */
 #toast{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-80px);
   background:var(--accent2);color:#fff;padding:10px 22px;border-radius:30px;
   font-size:14px;z-index:999;transition:.3s;opacity:0;pointer-events:none;white-space:nowrap;
   backdrop-filter:blur(8px)}
 #toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 #toast.error{background:var(--danger)}
-
-/* LOCK PRINCIPAL */
 .lock-icon-wrap{font-size:58px;display:block;text-align:center;margin-bottom:10px;
   animation:lockPulse 2s ease-in-out infinite alternate}
 @keyframes lockPulse{from{filter:drop-shadow(0 0 8px rgba(239,68,68,.4))}
@@ -141,12 +120,8 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
   border-radius:10px;text-decoration:none;font-size:15px;font-weight:600;
   margin:10px 0;border:none;width:100%;cursor:pointer;
   box-shadow:0 4px 16px rgba(22,163,74,.3)}
-
-/* FORGOT */
 .warn-box{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);
   border-radius:10px;padding:12px 14px;margin:10px 0;font-size:13px;color:#f87171;line-height:2}
-
-/* ADMIN */
 .admin-header{background:rgba(7,9,26,.88);border-bottom:1px solid var(--border);
   backdrop-filter:blur(16px);padding:12px 16px;position:sticky;top:0;z-index:10;
   display:flex;align-items:center;justify-content:space-between;width:100%}
@@ -180,13 +155,9 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
   padding:12px 14px;margin-bottom:12px;backdrop-filter:blur(8px);
   display:flex;align-items:center;justify-content:space-between}
 .admin-pass-label{font-size:13px;color:var(--text2)}
-
-/* DASH */
 .dash-header{background:rgba(7,9,26,.88);border-bottom:1px solid var(--border);
   backdrop-filter:blur(16px);padding:12px 16px;display:flex;justify-content:space-between;
   align-items:center;position:sticky;top:0;z-index:10;width:100%}
-
-/* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);
   z-index:100;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(5px)}
 .modal-overlay.open{display:flex}
@@ -195,15 +166,11 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
 .modal-title{font-size:15px;font-weight:700;margin-bottom:13px;color:var(--gold)}
 .modal-btns{display:flex;gap:9px;margin-top:13px}
 .modal-btns .btn{margin:0}
-
-/* FIRST TIME ADMIN SETUP */
 .setup-wrap{text-align:center;padding:8px}
 .setup-icon{font-size:52px;display:block;margin-bottom:10px;
   filter:drop-shadow(0 0 18px rgba(79,142,247,.6))}
 .setup-title{font-size:18px;font-weight:700;color:var(--gold);margin-bottom:6px}
 .setup-sub{font-size:13px;color:var(--text2);margin-bottom:16px;line-height:2}
-
-/* ANIM */
 @keyframes fadeDown{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -215,13 +182,9 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
 <canvas id="stars-canvas"></canvas>
 <div class="aurora"></div>
 <div id="toast"></div>
-
-<!-- GLOBAL LANG BTN -->
 <div class="lang-bar">
   <button class="lang-btn" onclick="toggleLang()" id="lang-btn">English</button>
 </div>
-
-<!-- ===== LOGIN ===== -->
 <div id="screen-login" class="screen active">
   <div class="logo-wrap">
     <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
@@ -240,7 +203,7 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
       <div class="pass-wrap">
         <input type="password" id="inp-pass" placeholder="••••••"
           onkeydown="if(event.key==='Enter')doLogin()">
-        <button class="eye-btn eye-closed" type="button" onclick="toggleEye('inp-pass',this)" id="eye-login"><svg class="eye-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button>
+        <button class="eye-btn eye-closed" type="button" onclick="toggleEye('inp-pass',this)"><svg class="eye-svg" viewBox="0 0 24 24"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button>
       </div>
     </div>
     <button class="btn btn-gold" onclick="doLogin()" id="btn-login">🔐 لاگ ان کریں</button>
@@ -250,8 +213,6 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
     <button class="btn btn-outline" id="btn-install" style="display:none" onclick="installApp()">📲 ایپ موبائل میں اتاریں</button>
   </div>
 </div>
-
-<!-- ===== REGISTER ===== -->
 <div id="screen-register" class="screen">
   <div class="logo-wrap">
     <span class="logo-icon">🏫</span>
@@ -270,76 +231,54 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
       <label id="lbl-spass">پاس ورڈ</label>
       <div class="pass-wrap">
         <input type="password" id="reg-pass" placeholder="••••••">
-        <button class="eye-btn eye-closed" type="button" onclick="toggleEye('reg-pass',this)"><svg class="eye-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button>
+        <button class="eye-btn eye-closed" type="button" onclick="toggleEye('reg-pass',this)"><svg class="eye-svg" viewBox="0 0 24 24"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button>
       </div>
     </div>
     <button class="btn btn-green" onclick="doRegister()" id="btn-reg">✅ اکاؤنٹ بنائیں</button>
     <button class="btn btn-outline" onclick="showScreen('screen-login')" id="btn-back-reg">← واپس</button>
   </div>
 </div>
-
-<!-- ===== FORGOT ===== -->
 <div id="screen-forgot" class="screen">
   <div class="card" style="max-width:400px">
     <div style="text-align:center;padding:6px">
       <span style="font-size:52px;display:block;margin-bottom:10px">🔑</span>
       <div style="font-size:17px;font-weight:700;color:var(--gold);margin-bottom:10px" id="forgot-title">پاس ورڈ بھول گئے؟</div>
-      <div class="warn-box" id="forgot-warn">
-        ⚠️ <strong>خبردار!</strong> نیا اکاؤنٹ نہ بنائیں — ورنہ آپ کا پرانا تمام ڈیٹا ضائع ہو جائے گا۔
-      </div>
-      <div class="safe-box" id="forgot-safe">
-        ✅ پریشان نہ ہوں — آپ کا ڈیٹا مکمل محفوظ ہے۔ نیچے بٹن سے مالک کو واٹس ایپ کریں، وہ آپ کا پاس ورڈ ری سیٹ کر دیں گے۔
-      </div>
-      <a id="wa-forgot-btn" class="wa-btn"
-        href="https://wa.me/923480329691?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85+%D8%B9%D9%84%DB%8C%DA%A9%D9%85%21+%D9%85%DB%8C%DA%BA+%D8%A7%D8%B3%D9%85%D8%A7%D8%B1%D9%B9+%D8%A7%D8%B3%DA%A9%D9%88%D9%84+%D8%A7%DB%8C%D9%BE+%DA%A9%D8%A7+%D9%BE%D8%A7%D8%B3+%D9%88%D8%B1%DA%88+%D8%A8%DA%BE%D9%88%D9%84+%DA%AF%DB%8C%D8%A7+%DB%81%D9%88%DA%BA%DB%94+%D8%A8%D8%B1%D8%A7%DB%81+%DA%A9%D8%B1%D9%85+%D9%85%DB%8C%D8%B1%D8%A7+%D9%BE%D8%A7%D8%B3+%D9%88%D8%B1%DA%88+%D8%B1%DB%8C+%D8%B3%DB%8C%D9%B9+%DA%A9%D8%B1+%D8%AF%DB%8C%DA%BA%DB%94"
-        target="_blank">
+      <div class="warn-box" id="forgot-warn">⚠️ <strong>خبردار!</strong> نیا اکاؤنٹ نہ بنائیں — ورنہ آپ کا پرانا تمام ڈیٹا ضائع ہو جائے گا۔</div>
+      <div class="safe-box" id="forgot-safe">✅ پریشان نہ ہوں — آپ کا ڈیٹا مکمل محفوظ ہے۔ نیچے بٹن سے مالک کو واٹس ایپ کریں، وہ آپ کا پاس ورڈ ری سیٹ کر دیں گے۔</div>
+      <a id="wa-forgot-btn" class="wa-btn" href="https://wa.me/923480329691?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85+%D8%B9%D9%84%DB%8C%DA%A9%D9%85%21+%D9%85%DB%8C%DA%BA+%D8%A7%D8%B3%D9%85%D8%A7%D8%B1%D9%B9+%D8%A7%D8%B3%DA%A9%D9%88%D9%84+%D8%A7%DB%8C%D9%BE+%DA%A9%D8%A7+%D9%BE%D8%A7%D8%B3+%D9%88%D8%B1%DA%88+%D8%A8%DA%BE%D9%88%D9%84+%DA%AF%DB%8C%D8%A7+%DB%81%D9%88%DA%BA%DB%94+%D8%A8%D8%B1%D8%A7%DB%81+%DA%A9%D8%B1%D9%85+%D9%85%DB%8C%D8%B1%D8%A7+%D9%BE%D8%A7%D8%B3+%D9%88%D8%B1%DA%88+%D8%B1%DB%8C+%D8%B3%DB%8C%D9%B9+%DA%A9%D8%B1+%D8%AF%DB%8C%DA%BA%DB%94" target="_blank">
         <span style="font-size:20px">💬</span> واٹس ایپ کریں — 03480329691
       </a>
       <button class="btn btn-outline" onclick="showScreen('screen-login')" id="btn-back-forgot">← واپس</button>
     </div>
   </div>
 </div>
-
-<!-- ===== LOCK PRINCIPAL ===== -->
 <div id="screen-lock-principal" class="screen">
   <div class="card">
     <span class="lock-icon-wrap">🔒</span>
     <div class="lock-title" id="lock-title-txt">ماہانہ پیکج مکمل ہو گیا</div>
     <div class="lock-school" id="lock-school-name">—</div>
-    <div class="safe-box">
-      ✅ اطمینان رکھیں — آپ کے تمام بچوں، اساتذہ، حاضری اور فیس کا ریکارڈ <strong>100% محفوظ ہے۔</strong>
-      ماہانہ فیس جمع کرواتے ہی ایپ فوراً کھل جائے گی۔
-    </div>
+    <div class="safe-box">✅ اطمینان رکھیں — آپ کے تمام بچوں، اساتذہ، حاضری اور فیس کا ریکارڈ <strong>100% محفوظ ہے۔</strong> ماہانہ فیس جمع کرواتے ہی ایپ فوراً کھل جائے گی۔</div>
     <div class="fee-box">
       <div class="fee-label" id="fee-label-txt">ماہانہ سروس چارجز</div>
       <div class="fee-amount">3,000 روپے</div>
       <div class="fee-period" id="fee-period-txt">اگلے 30 دن کے لیے</div>
     </div>
     <div style="font-size:12px;color:var(--text2);margin:8px 0 4px;text-align:center" id="pay-method-txt">ادائیگی: جیز کیش / ایزی پیسہ</div>
-    <div style="font-size:17px;font-weight:700;color:var(--warn);text-align:center;margin-bottom:12px;
-      text-shadow:0 0 12px rgba(245,158,11,.4)">03012207137</div>
-    <a class="wa-btn"
-      href="https://wa.me/923480329691?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85+%D8%B9%D9%84%DB%8C%DA%A9%D9%85%21+%D9%85%DB%8C%DA%BA+%D8%A7%D8%B3%DA%A9%D9%88%D9%84+%DA%A9%DB%8C+%D9%85%D8%A7%DB%81%D8%A7%D9%86%DB%81+%D9%81%DB%8C%D8%B3+%D8%AC%D9%85%D8%B9+%DA%A9%D8%B1%D9%88%D8%A7%D9%86%D8%A7+%DA%86%D8%A7%DB%81%D8%AA%D8%A7+%DB%81%D9%88%DA%BA%DB%94+%D8%A8%D8%B1%D8%A7%DB%81+%DA%A9%D8%B1%D9%85+%D8%A7%DB%8C%DA%A9%D8%A7%D8%A4%D9%86%D9%B9+%DA%A9%DA%BE%D9%88%D9%84+%D8%AF%DB%8C%DA%BA%DB%94"
-      target="_blank">
+    <div style="font-size:17px;font-weight:700;color:var(--warn);text-align:center;margin-bottom:12px;text-shadow:0 0 12px rgba(245,158,11,.4)">03012207137</div>
+    <a class="wa-btn" href="https://wa.me/923480329691?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85+%D8%B9%D9%84%DB%8C%DA%A9%D9%85%21+%D9%85%DB%8C%DA%BA+%D8%A7%D8%B3%DA%A9%D9%88%D9%84+%DA%A9%DB%8C+%D9%85%D8%A7%DB%81%D8%A7%D9%86%DB%81+%D9%81%DB%8C%D8%B3+%D8%AC%D9%85%D8%B9+%DA%A9%D8%B1%D9%88%D8%A7%D9%86%D8%A7+%DA%86%D8%A7%DB%81%D8%AA%D8%A7+%DB%81%D9%88%DA%BA%DB%94+%D8%A8%D8%B1%D8%A7%DB%81+%DA%A9%D8%B1%D9%85+%D8%A7%DB%8C%DA%A9%D8%A7%D8%A4%D9%86%D9%B9+%DA%A9%DA%BE%D9%88%D9%84+%D8%AF%DB%8C%DA%BA%DB%94" target="_blank">
       <span style="font-size:20px">💬</span> واٹس ایپ — 03480329691
     </a>
     <button class="btn btn-outline" onclick="doLogout()" id="lock-logout-btn">لاگ آؤٹ کریں</button>
   </div>
 </div>
-
-<!-- ===== LOCK TEACHER ===== -->
 <div id="screen-lock-teacher" class="screen">
   <div class="card" style="text-align:center;padding:28px 20px">
     <span style="font-size:50px;display:block;margin-bottom:10px">⏸️</span>
     <div style="font-size:16px;font-weight:700;color:var(--warn);margin-bottom:10px" id="lock-t-title">اسکول سسٹم عارضی طور پر بند ہے</div>
-    <div style="font-size:13px;color:var(--text2);line-height:2" id="lock-t-msg">
-      معذرت! آپ کے اسکول کا پورٹل ابھی بند ہے۔<br>اپنے اسکول کے پرنسپل سے رابطہ کریں۔
-    </div>
+    <div style="font-size:13px;color:var(--text2);line-height:2" id="lock-t-msg">معذرت! آپ کے اسکول کا پورٹل ابھی بند ہے۔<br>اپنے اسکول کے پرنسپل سے رابطہ کریں۔</div>
     <button class="btn btn-outline" onclick="doLogout()" style="margin-top:22px" id="lock-t-logout">لاگ آؤٹ کریں</button>
   </div>
 </div>
-
-<!-- ===== DASHBOARD ===== -->
 <div id="screen-dashboard" class="screen" style="justify-content:flex-start;padding:0">
   <div style="width:100%;max-width:500px;margin:0 auto">
     <div class="dash-header">
@@ -358,56 +297,36 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
     </div>
   </div>
 </div>
-
-<!-- ===== SUPER ADMIN ===== -->
 <div id="screen-admin" class="screen" style="justify-content:flex-start;padding:0;align-items:flex-start">
-  <!-- First time setup -->
-  <div id="admin-setup-screen" style="display:none;flex-direction:column;align-items:center;
-    justify-content:center;min-height:100vh;padding:24px 16px;width:100%">
+  <div id="admin-setup-screen" style="display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px 16px;width:100%">
     <div class="card" style="max-width:420px">
       <div class="setup-wrap">
         <span class="setup-icon">🛡️</span>
         <div class="setup-title" id="setup-title">پہلی بار پاس ورڈ سیٹ کریں</div>
         <div class="setup-sub" id="setup-sub">یہ پاس ورڈ یاد رکھیں — اسی سے ایڈمن پینل کھلے گا۔</div>
-        <div class="field">
-          <label id="setup-lbl">نیا ایڈمن پاس ورڈ</label>
-          <div class="pass-wrap">
-            <input type="password" id="setup-pass" placeholder="••••••">
-            <button class="eye-btn eye-closed" type="button" onclick="toggleEye('setup-pass',this)"><svg class="eye-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button>
-          </div>
-        </div>
-        <div class="field">
-          <label id="setup-lbl2">پاس ورڈ دوبارہ لکھیں</label>
-          <div class="pass-wrap">
-            <input type="password" id="setup-pass2" placeholder="••••••">
-            <button class="eye-btn eye-closed" type="button" onclick="toggleEye('setup-pass2',this)"><svg class="eye-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button>
-          </div>
-        </div>
+        <div class="field"><label id="setup-lbl">نیا ایڈمن پاس ورڈ</label>
+          <div class="pass-wrap"><input type="password" id="setup-pass" placeholder="••••••">
+          <button class="eye-btn eye-closed" type="button" onclick="toggleEye('setup-pass',this)"><svg class="eye-svg" viewBox="0 0 24 24"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button></div></div>
+        <div class="field"><label id="setup-lbl2">پاس ورڈ دوبارہ لکھیں</label>
+          <div class="pass-wrap"><input type="password" id="setup-pass2" placeholder="••••••">
+          <button class="eye-btn eye-closed" type="button" onclick="toggleEye('setup-pass2',this)"><svg class="eye-svg" viewBox="0 0 24 24"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button></div></div>
         <button class="btn btn-gold" onclick="doSetupPass()" id="setup-btn">✅ پاس ورڈ محفوظ کریں</button>
       </div>
     </div>
   </div>
-  <!-- Pass entry -->
-  <div id="admin-pass-screen" style="display:flex;flex-direction:column;align-items:center;
-    justify-content:center;min-height:100vh;padding:24px 16px;width:100%">
+  <div id="admin-pass-screen" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px 16px;width:100%">
     <div class="logo-wrap">
       <span class="logo-icon" style="filter:drop-shadow(0 0 18px rgba(79,142,247,.6))">🛡️</span>
       <div class="logo-title" id="adm-login-title">سپر ایڈمن پینل</div>
       <div class="logo-sub" id="adm-login-sub">صرف مالک کے لیے</div>
     </div>
     <div class="card">
-      <div class="field">
-        <label id="adm-pass-lbl">خفیہ پاس ورڈ</label>
-        <div class="pass-wrap">
-          <input type="password" id="admin-pass-inp" placeholder="••••••"
-            onkeydown="if(event.key==='Enter')checkAdminPass()">
-          <button class="eye-btn eye-closed" type="button" onclick="toggleEye('admin-pass-inp',this)"><svg class="eye-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button>
-        </div>
-      </div>
+      <div class="field"><label id="adm-pass-lbl">خفیہ پاس ورڈ</label>
+        <div class="pass-wrap"><input type="password" id="admin-pass-inp" placeholder="••••••" onkeydown="if(event.key==='Enter')checkAdminPass()">
+        <button class="eye-btn eye-closed" type="button" onclick="toggleEye('admin-pass-inp',this)"><svg class="eye-svg" viewBox="0 0 24 24"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button></div></div>
       <button class="btn btn-gold" onclick="checkAdminPass()" id="adm-open-btn">🔓 پینل کھولیں</button>
     </div>
   </div>
-  <!-- Main panel -->
   <div id="admin-main" style="display:none;width:100%;flex-direction:column;align-items:center">
     <div class="admin-header">
       <div class="admin-title" id="adm-panel-title">🛡️ سپر ایڈمن پینل</div>
@@ -427,34 +346,29 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
     </div>
   </div>
 </div>
-
-<!-- ===== MODALS ===== -->
-<!-- Change Admin Pass -->
 <div class="modal-overlay" id="modal-change-pass">
   <div class="modal">
     <div class="modal-title" id="m-chng-title">🔑 ایڈمن پاس ورڈ تبدیل کریں</div>
     <div style="font-size:12px;color:var(--text2);margin-bottom:10px" id="m-chng-opt1-lbl">آپشن 1 — پرانے پاس ورڈ سے:</div>
     <div class="field"><label id="m-old-lbl">پرانا پاس ورڈ</label>
       <div class="pass-wrap"><input type="password" id="old-pass" placeholder="••••••">
-      <button class="eye-btn eye-closed" type="button" onclick="toggleEye('old-pass',this)"><svg class="eye-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button></div></div>
+      <button class="eye-btn eye-closed" type="button" onclick="toggleEye('old-pass',this)"><svg class="eye-svg" viewBox="0 0 24 24"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button></div></div>
     <div class="field"><label id="m-new1-lbl">نیا پاس ورڈ</label>
       <div class="pass-wrap"><input type="password" id="new-pass1" placeholder="••••••">
-      <button class="eye-btn eye-closed" type="button" onclick="toggleEye('new-pass1',this)"><svg class="eye-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button></div></div>
+      <button class="eye-btn eye-closed" type="button" onclick="toggleEye('new-pass1',this)"><svg class="eye-svg" viewBox="0 0 24 24"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button></div></div>
     <div class="field"><label id="m-new2-lbl">نیا پاس ورڈ دوبارہ</label>
       <div class="pass-wrap"><input type="password" id="new-pass2" placeholder="••••••">
-      <button class="eye-btn eye-closed" type="button" onclick="toggleEye('new-pass2',this)"><svg class="eye-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button></div></div>
+      <button class="eye-btn eye-closed" type="button" onclick="toggleEye('new-pass2',this)"><svg class="eye-svg" viewBox="0 0 24 24"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button></div></div>
     <div style="text-align:center;color:var(--text2);font-size:12px;margin:6px 0" id="m-or-lbl">— یا —</div>
     <div style="font-size:12px;color:var(--text2);margin-bottom:8px" id="m-chng-opt2-lbl">آپشن 2 — سیدھا نیا پاس ورڈ:</div>
     <div class="field"><div class="pass-wrap"><input type="password" id="direct-new-pass" placeholder="••••••">
-      <button class="eye-btn eye-closed" type="button" onclick="toggleEye('direct-new-pass',this)"><svg class="eye-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button></div></div>
+      <button class="eye-btn eye-closed" type="button" onclick="toggleEye('direct-new-pass',this)"><svg class="eye-svg" viewBox="0 0 24 24"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button></div></div>
     <div class="modal-btns">
       <button class="btn btn-gold" onclick="saveAdminPass()" id="m-save-btn">محفوظ کریں</button>
       <button class="btn btn-outline" onclick="closeModal('modal-change-pass')" id="m-cancel-btn">منسوخ</button>
     </div>
   </div>
 </div>
-
-<!-- Add School -->
 <div class="modal-overlay" id="modal-add-school">
   <div class="modal">
     <div class="modal-title" id="m-add-title">➕ نیا اسکول شامل کریں</div>
@@ -464,31 +378,27 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
       <input type="tel" id="sch-mobile" placeholder="03XXXXXXXXX" inputmode="numeric"></div>
     <div class="field"><label id="m-spass-lbl">پاس ورڈ</label>
       <div class="pass-wrap"><input type="password" id="sch-pass" placeholder="••••••">
-      <button class="eye-btn eye-closed" type="button" onclick="toggleEye('sch-pass',this)"><svg class="eye-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button></div></div>
+      <button class="eye-btn eye-closed" type="button" onclick="toggleEye('sch-pass',this)"><svg class="eye-svg" viewBox="0 0 24 24"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button></div></div>
     <div class="modal-btns">
       <button class="btn btn-green" onclick="saveSchool()" id="m-add-save-btn">محفوظ کریں</button>
       <button class="btn btn-outline" onclick="closeModal('modal-add-school')" id="m-add-cancel-btn">منسوخ</button>
     </div>
   </div>
 </div>
-
-<!-- School Pass -->
 <div class="modal-overlay" id="modal-school-pass">
   <div class="modal">
     <div class="modal-title" id="m-spass-title">🔑 اسکول پاس ورڈ تبدیل کریں</div>
     <input type="hidden" id="sch-pass-id">
     <div class="field"><label id="m-snp-lbl">نیا پاس ورڈ</label>
       <div class="pass-wrap"><input type="password" id="sch-new-pass" placeholder="••••••">
-      <button class="eye-btn eye-closed" type="button" onclick="toggleEye('sch-new-pass',this)"><svg class="eye-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button></div></div>
+      <button class="eye-btn eye-closed" type="button" onclick="toggleEye('sch-new-pass',this)"><svg class="eye-svg" viewBox="0 0 24 24"><ellipse class="eye-white" cx="12" cy="12" rx="10" ry="6.5"/><circle class="eye-iris" cx="12" cy="12" r="3.8"/><circle class="eye-pupil" cx="12" cy="12" r="2"/><circle class="eye-shine" cx="13.2" cy="10.5" r="0.9"/><path class="eye-lid-top" d="M2 12 Q12 3 22 12"/><path class="eye-lid-bot" d="M2 12 Q12 21 22 12"/><ellipse class="eye-outline" cx="12" cy="12" rx="10" ry="6.5"/></svg></button></div></div>
     <div class="modal-btns">
       <button class="btn btn-gold" onclick="saveSchoolPass()" id="m-sp-save-btn">محفوظ کریں</button>
       <button class="btn btn-outline" onclick="closeModal('modal-school-pass')" id="m-sp-cancel-btn">منسوخ</button>
     </div>
   </div>
 </div>
-
 <script>
-// ===== STARS =====
 (function(){
   const cv=document.getElementById('stars-canvas'),ctx=cv.getContext('2d');
   let W,H,stars=[];
@@ -506,21 +416,15 @@ body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
   window.addEventListener('resize',()=>{clearTimeout(window._rt);window._rt=setTimeout(resize,200);});
   resize();draw();
 })();
-
-// ===== SUPABASE =====
 const SUPA_URL='https://usaplgzhmlvequoppcfi.supabase.co';
 const SUPA_KEY='sb_publishable_M9bE3fUiy6crIHuvrHGkEg_PmlzgC-B';
 const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
-
-// ===== DB (local fallback) =====
 const DBK='smartschool_v3';
 function getDB(){
   try{return JSON.parse(localStorage.getItem(DBK))||{adminPass:null,session:null};}
   catch(e){return{adminPass:null,session:null};}
 }
 function saveDB(db){localStorage.setItem(DBK,JSON.stringify(db));}
-
-// ===== SUPABASE HELPERS =====
 async function sbGetSchools(){
   const{data,error}=await supa.from('schools').select('*').order('created_at',{ascending:false});
   if(error){console.error('sbGetSchools',error);return[];}
@@ -535,17 +439,18 @@ async function sbUpdateSchool(id,updates){
   const{error}=await supa.from('schools').update(updates).eq('id',id);
   if(error)console.error('sbUpdateSchool',error);
 }
+// ✅ FIX 1: maybeSingle() - نہ ملے تو null دیتا ہے، error نہیں
 async function sbFindSchool(mobile,pass){
-  const{data,error}=await supa.from('schools').select('*').eq('mobile',mobile).eq('pass',pass).single();
+  const{data,error}=await supa.from('schools').select('*').eq('mobile',mobile).eq('pass',pass).maybeSingle();
   if(error)return null;
   return data;
 }
+// ✅ FIX 2: maybeSingle() - نہ ملے تو null دیتا ہے، error نہیں
 async function sbFindByMobile(mobile){
-  const{data}=await supa.from('schools').select('id').eq('mobile',mobile).single();
+  const{data,error}=await supa.from('schools').select('id').eq('mobile',mobile).maybeSingle();
+  if(error)return null;
   return data;
 }
-
-// ===== EYE =====
 function toggleEye(inputId,btn){
   const inp=document.getElementById(inputId);
   if(!inp)return;
@@ -553,8 +458,6 @@ function toggleEye(inputId,btn){
   inp.type=isPass?'text':'password';
   if(btn){btn.classList.toggle('eye-open',isPass);btn.classList.toggle('eye-closed',!isPass);}
 }
-
-// ===== LANG =====
 let lang='ur';
 const TX={
   ur:{
@@ -610,19 +513,15 @@ const TX={
     noSchools:'No schools yet'
   }
 };
-
 function applyLang(){
   const t=TX[lang];
   document.documentElement.lang=lang;
   document.documentElement.dir=lang==='ur'?'rtl':'ltr';
-  // Font switch - صرف انگلش عناصر پر، اردو ہمیشہ Nastaliq
   const enFont="'Merriweather','Playfair Display',serif";
   const urFont="'Noto Nastaliq Urdu',serif";
-  // بٹن، لیبل وغیرہ
   document.querySelectorAll('.btn,.badge,.aBtn,.stat-label,input,label').forEach(el=>{
     el.style.fontFamily=lang==='en'?enFont:urFont;
   });
-  // اردو متن ہمیشہ Nastaliq
   document.querySelectorAll('.bismillah,.logo-title,.logo-sub').forEach(el=>{
     el.style.fontFamily=urFont;
   });
@@ -673,23 +572,17 @@ function applyLang(){
   document.getElementById('lock-t-logout').textContent=t.logout;
 }
 function toggleLang(){lang=lang==='ur'?'en':'ur';applyLang();}
-
-// ===== SCREENS =====
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
-
-// ===== TOAST =====
 let _tt;
 function toast(msg,err=false){
   const t=document.getElementById('toast');
   t.textContent=msg;t.className='show'+(err?' error':'');
   clearTimeout(_tt);_tt=setTimeout(()=>t.className='',2800);
 }
-
-// ===== INSTALL =====
 let _dp;
 window.addEventListener('beforeinstallprompt',e=>{
   e.preventDefault();_dp=e;
@@ -699,8 +592,6 @@ function installApp(){
   if(_dp){_dp.prompt();_dp=null;}
   else toast(lang==='ur'?'براہ کرم براؤزر مینو سے "Add to Home Screen" استعمال کریں':'Use browser menu → Add to Home Screen');
 }
-
-// ===== LOGIN =====
 async function doLogin(){
   const mobile=document.getElementById('inp-mobile').value.trim();
   const pass=document.getElementById('inp-pass').value.trim();
@@ -711,7 +602,6 @@ async function doLogin(){
   const db=getDB();db.session={schoolId:school.id,role:'principal'};saveDB(db);
   enterSchool(school);
 }
-
 function enterSchool(school){
   if(!school.active){
     document.getElementById('lock-school-name').textContent=school.name;
@@ -722,7 +612,6 @@ function enterSchool(school){
   document.getElementById('dash-staff').textContent=(school.staff||[]).length;
   showScreen('screen-dashboard');
 }
-
 function doLogout(){
   const db=getDB();db.session=null;saveDB(db);
   ['inp-mobile','inp-pass','admin-pass-inp'].forEach(id=>{
@@ -733,8 +622,6 @@ function doLogout(){
   location.hash='';
   showScreen('screen-login');
 }
-
-// ===== REGISTER =====
 async function doRegister(){
   const name=document.getElementById('reg-school').value.trim();
   const mobile=document.getElementById('reg-mobile').value.trim();
@@ -749,14 +636,10 @@ async function doRegister(){
   toast(lang==='ur'?'✅ اکاؤنٹ بن گیا! 30 دن کا ٹائمر شروع۔':'✅ Account created! 30-day timer started.');
   enterSchool(school);
 }
-
-// ===== DAYS =====
 function getDaysLeft(createdAt){
   const ms=typeof createdAt==='string'?new Date(createdAt).getTime():createdAt;
   return 30-Math.floor((Date.now()-ms)/864e5);
 }
-
-// ===== AUTO LOGIN =====
 window.addEventListener('load',async()=>{
   applyLang();
   if(location.hash==='#admin'){loadAdminScreen();return;}
@@ -767,13 +650,10 @@ window.addEventListener('load',async()=>{
   }
   showScreen('screen-login');
 });
-
-// ===== ADMIN =====
 function loadAdminScreen(){
   showScreen('screen-admin');
   const db=getDB();
   if(!db.adminPass){
-    // First time — show setup
     document.getElementById('admin-pass-screen').style.display='none';
     document.getElementById('admin-setup-screen').style.display='flex';
     document.getElementById('admin-main').style.display='none';
@@ -783,7 +663,6 @@ function loadAdminScreen(){
     document.getElementById('admin-main').style.display='none';
   }
 }
-
 function doSetupPass(){
   const p1=document.getElementById('setup-pass').value.trim();
   const p2=document.getElementById('setup-pass2').value.trim();
@@ -794,7 +673,6 @@ function doSetupPass(){
   document.getElementById('admin-setup-screen').style.display='none';
   document.getElementById('admin-pass-screen').style.display='flex';
 }
-
 function checkAdminPass(){
   const val=document.getElementById('admin-pass-inp').value;
   const db=getDB();
@@ -807,7 +685,6 @@ function checkAdminPass(){
     document.getElementById('admin-pass-inp').value='';
   }
 }
-
 async function renderAdminPanel(){
   const list=document.getElementById('schools-list');
   list.innerHTML=`<div style="text-align:center;color:var(--text2);padding:28px;font-size:14px">⏳ لوڈ ہو رہا ہے...</div>`;
@@ -834,7 +711,6 @@ async function renderAdminPanel(){
       </div></div>`;
   }).join('');
 }
-
 async function toggleSchool(id){
   const{data:s}=await supa.from('schools').select('*').eq('id',id).single();
   if(!s)return;
@@ -846,9 +722,7 @@ async function toggleSchool(id){
     :(lang==='ur'?`🔒 ${s.name} بند کر دیا`:`🔒 ${s.name} closed`));
   renderAdminPanel();
 }
-
 async function enterAsAdmin(id){const{data:s}=await supa.from('schools').select('*').eq('id',id).single();if(s)enterSchool(s);}
-
 function saveAdminPass(){
   const db=getDB();
   const direct=document.getElementById('direct-new-pass').value.trim();
@@ -860,13 +734,11 @@ function saveAdminPass(){
   if(!n1||n1!==n2){toast(lang==='ur'?'نیا پاس ورڈ میل نہیں کھاتا':'Passwords do not match',true);return;}
   db.adminPass=n1;saveDB(db);toast(lang==='ur'?'پاس ورڈ محفوظ':'Password saved');closeModal('modal-change-pass');
 }
-
 function openSchoolPass(id){
   document.getElementById('sch-pass-id').value=id;
   document.getElementById('sch-new-pass').value='';
   openModal('modal-school-pass');
 }
-
 async function saveSchoolPass(){
   const id=document.getElementById('sch-pass-id').value;
   const pass=document.getElementById('sch-new-pass').value.trim();
@@ -875,12 +747,10 @@ async function saveSchoolPass(){
   toast(lang==='ur'?'پاس ورڈ تبدیل ہو گیا':'Password changed');
   closeModal('modal-school-pass');
 }
-
 function openAddSchool(){
   ['sch-name','sch-mobile','sch-pass'].forEach(id=>document.getElementById(id).value='');
   openModal('modal-add-school');
 }
-
 async function saveSchool(){
   const name=document.getElementById('sch-name').value.trim();
   const mobile=document.getElementById('sch-mobile').value.trim();
@@ -893,13 +763,11 @@ async function saveSchool(){
   toast(lang==='ur'?`✅ ${name} شامل کر دیا`:`✅ ${name} added`);
   closeModal('modal-add-school');renderAdminPanel();
 }
-
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.modal-overlay').forEach(m=>{
   m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});
 });
-
 window.addEventListener('hashchange',()=>{
   if(location.hash==='#admin')loadAdminScreen();
 });
