@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ہمراز ساتھی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gulzar&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#06091a;--gold:#e8c86a;--gold2:#f5e09a;
+  --text:#f0e8d0;--text2:#a09880;
+  --card:rgba(255,255,255,0.04);--card-b:rgba(255,255,255,0.09);
+  --green:#16a34a;--green2:#22c55e;
+  --red:#dc2626;
+  --mic:#7c3aed;--mic2:#a78bfa;
+}
+html,body{height:100%;overflow-x:hidden;background:var(--bg);
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+body{font-family:'Noto Nastaliq Urdu','Noto Naskh Arabic',serif;color:var(--text);min-height:100vh;position:relative}
+
+/* Aurora */
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.al{position:absolute;border-radius:50%;filter:blur(80px);animation:af 14s ease-in-out infinite alternate}
+.a1{width:70vw;height:60vh;top:-10%;right:-10%;background:radial-gradient(ellipse,rgba(99,60,200,0.35),transparent 70%)}
+.a2{width:60vw;height:50vh;bottom:-10%;left:-10%;background:radial-gradient(ellipse,rgba(20,80,180,0.3),transparent 70%);animation-delay:-5s}
+.a3{width:40vw;height:40vh;top:30%;left:30%;background:radial-gradient(ellipse,rgba(180,100,30,0.15),transparent 70%);animation-delay:-9s}
+@keyframes af{0%{transform:scale(1) translate(0,0)}100%{transform:scale(1.12) translate(3%,4%)}}
+
+/* Stars */
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+.star{position:absolute;border-radius:50%;background:#fff;animation:tw var(--d,2s) ease-in-out infinite alternate}
+@keyframes tw{0%{opacity:.1;transform:scale(1)}100%{opacity:.8;transform:scale(1.4)}}
+
+/* ========== SCREEN SYSTEM ========== */
+.screen{position:fixed;inset:0;z-index:10;overflow-y:auto;display:none;flex-direction:column;background:var(--bg)}
+.screen.active{display:flex}
+
+/* ========== HEADER ========== */
+.hdr{position:sticky;top:0;z-index:20;text-align:center;padding:14px 16px 10px;
+  background:rgba(6,9,26,0.85);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(232,200,106,0.15);flex-shrink:0}
+.hdr-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.app-name{font-family:'Gulzar',serif;font-size:26px;color:var(--gold);
+  animation:np 4s ease-in-out infinite alternate;flex:1;text-align:center}
+@keyframes np{0%{text-shadow:0 0 20px rgba(232,200,106,0.4)}100%{text-shadow:0 0 44px rgba(232,200,106,0.9),0 0 80px rgba(232,200,106,0.25)}}
+.app-sub{font-size:11px;color:var(--text2);margin-top:3px;line-height:1.8;text-align:center}
+.back-btn{background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);
+  border-radius:10px;padding:7px 12px;color:var(--mic2);font-size:12px;
+  cursor:pointer;font-family:inherit;line-height:1.6;white-space:nowrap;flex-shrink:0}
+.back-btn:active{transform:scale(.92)}
+.del-btn{background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.3);
+  border-radius:10px;padding:7px 12px;color:#fca5a5;font-size:12px;
+  cursor:pointer;font-family:inherit;line-height:1.6;white-space:nowrap;flex-shrink:0}
+.del-btn:active{transform:scale(.92)}
+
+/* Status */
+.sbar{display:flex;align-items:center;justify-content:center;gap:7px;padding:7px;
+  background:rgba(124,58,237,0.07);border-bottom:1px solid rgba(124,58,237,0.12);flex-shrink:0}
+.sdot{width:7px;height:7px;border-radius:50%;background:var(--green2);animation:sp 1.5s infinite}
+@keyframes sp{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,.4)}50%{opacity:.7;box-shadow:0 0 0 5px rgba(34,197,94,0)}}
+.stxt{font-size:11px;color:var(--mic2)}
+
+/* ========== LIST SCREEN ========== */
+.lwrap{position:relative;z-index:3;padding:12px 12px 40px;flex:1}
+.list-title{font-family:'Gulzar',serif;font-size:15px;color:var(--gold);
+  text-align:center;padding:8px 0 6px;opacity:.7}
+
+/* Card */
+.mcard{background:var(--card);border:1px solid var(--card-b);border-radius:16px;
+  padding:13px 14px;margin-bottom:9px;display:flex;align-items:center;gap:10px;
+  transition:all .25s;position:relative;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mcard::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(124,58,237,.04),transparent);pointer-events:none}
+.mcard:active{transform:scale(.98);border-color:rgba(167,139,250,0.4)}
+.mcard.has-note{border-color:rgba(167,139,250,0.35);background:rgba(124,58,237,0.06)}
+.mcard.is-done{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.05)}
+
+.mnum{width:28px;height:28px;border-radius:50%;background:rgba(124,58,237,0.2);
+  border:1px solid rgba(124,58,237,0.3);display:flex;align-items:center;
+  justify-content:center;font-size:11px;color:var(--mic2);flex-shrink:0}
+.minfo{flex:1;min-width:0}
+.mname{font-size:15px;color:var(--text);line-height:2}
+.mcard.is-done .mname{text-decoration:line-through;color:var(--text2)}
+.mnote-preview{font-size:10px;color:var(--mic2);line-height:1.6;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.marrow{font-size:16px;color:var(--text2);flex-shrink:0}
+.mbadge{font-size:9px;padding:2px 7px;border-radius:20px;flex-shrink:0;line-height:1.6}
+.mbadge.saved{background:rgba(124,58,237,0.25);color:var(--mic2);border:1px solid rgba(124,58,237,0.3)}
+.mbadge.done{background:rgba(34,197,94,0.2);color:var(--green2);border:1px solid rgba(34,197,94,0.3)}
+
+/* Voice selector */
+.vsel-wrap{padding:10px 12px;display:flex;align-items:center;justify-content:center;gap:8px;
+  background:rgba(6,9,26,0.5);border-bottom:1px solid rgba(124,58,237,0.1);flex-shrink:0}
+.vsel-label{font-size:11px;color:var(--text2)}
+.vbtn{background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);
+  border-radius:20px;padding:4px 12px;color:var(--mic2);font-size:11px;
+  cursor:pointer;font-family:inherit;transition:all .2s;line-height:1.6}
+.vbtn.on{background:rgba(124,58,237,0.5);border-color:var(--mic2);color:#fff;
+  box-shadow:0 0 10px rgba(124,58,237,0.4)}
+.vbtn:active{transform:scale(.92)}
+
+/* ========== DETAIL SCREEN ========== */
+.detail-body{flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:20px 16px 40px;position:relative;z-index:3;gap:16px}
+
+/* Memory title on detail */
+.detail-title{font-family:'Gulzar',serif;font-size:22px;color:var(--gold);
+  text-align:center;line-height:2;animation:np 4s ease-in-out infinite alternate}
+
+/* Saved note box */
+.note-box{width:100%;background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.25);
+  border-radius:16px;padding:14px 16px;min-height:70px}
+.note-box-label{font-size:10px;color:var(--text2);margin-bottom:6px;line-height:1.6}
+.note-box-text{font-size:14px;color:var(--text);line-height:2.2}
+.note-box-empty{font-size:13px;color:var(--text2);line-height:2;text-align:center;padding:8px 0}
+
+/* Status badge on detail */
+.detail-status{padding:5px 16px;border-radius:20px;font-size:11px;line-height:1.8;
+  border:1px solid rgba(167,139,250,0.3);color:var(--mic2);background:rgba(124,58,237,0.1)}
+.detail-status.done-status{border-color:rgba(34,197,94,0.3);color:var(--green2);
+  background:rgba(34,197,94,0.1)}
+
+/* BIG MIC */
+.big-mic-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:4px}
+.mic-hint{font-size:12px;color:var(--text2);text-align:center;line-height:2}
+.big-mic{width:88px;height:88px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(124,58,237,0.6),rgba(167,139,250,0.3));
+  border:2px solid rgba(167,139,250,0.5);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:36px;
+  transition:all .25s;position:relative;
+  box-shadow:0 0 30px rgba(124,58,237,0.3)}
+.big-mic::before{content:'';position:absolute;inset:-8px;border-radius:50%;
+  border:1px solid rgba(167,139,250,0.2);animation:pr 2s linear infinite}
+@keyframes pr{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.15);opacity:0}}
+.big-mic:active{transform:scale(.92)}
+.big-mic.listening{
+  background:linear-gradient(135deg,rgba(220,38,38,0.7),rgba(252,165,165,0.4));
+  border-color:#fca5a5;
+  box-shadow:0 0 50px rgba(220,38,38,0.6),0 0 100px rgba(220,38,38,0.2);
+  animation:mp .7s ease-in-out infinite alternate}
+@keyframes mp{0%{box-shadow:0 0 20px rgba(220,38,38,0.4)}100%{box-shadow:0 0 60px rgba(220,38,38,0.9)}}
+.listen-txt{font-size:13px;color:var(--mic2);text-align:center;line-height:2;min-height:28px}
+.listen-txt.red{color:#fca5a5}
+
+/* AI waves */
+.ai-waves{display:flex;align-items:center;justify-content:center;gap:5px;
+  height:36px;opacity:0;transition:opacity .3s}
+.ai-waves.show{opacity:1}
+.wv{width:4px;border-radius:4px;background:var(--mic2);
+  animation:wva .8s ease-in-out infinite alternate}
+.wv:nth-child(1){height:8px;animation-delay:0s}
+.wv:nth-child(2){height:18px;animation-delay:.1s}
+.wv:nth-child(3){height:28px;animation-delay:.2s}
+.wv:nth-child(4){height:14px;animation-delay:.3s}
+.wv:nth-child(5){height:22px;animation-delay:.4s}
+.wv:nth-child(6){height:10px;animation-delay:.5s}
+.wv:nth-child(7){height:20px;animation-delay:.6s}
+@keyframes wva{0%{transform:scaleY(.4);opacity:.5}100%{transform:scaleY(1);opacity:1}}
+
+/* Mark done button */
+.done-toggle{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);
+  border-radius:12px;padding:9px 20px;color:var(--green2);font-size:13px;
+  cursor:pointer;font-family:inherit;line-height:1.8;transition:all .2s}
+.done-toggle:active{transform:scale(.96)}
+.done-toggle.undone{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:var(--text2)}
+
+/* Confirm overlay */
+.conf-ov{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:50;
+  display:flex;align-items:flex-end;animation:fi .2s;display:none}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.conf-box{background:#0d1b3e;border:1px solid rgba(232,200,106,.25);
+  border-radius:24px 24px 0 0;padding:20px 16px 28px;width:100%;animation:su .3s}
+@keyframes su{from{transform:translateY(100%)}to{transform:none}}
+.conf-title{font-family:'Gulzar',serif;font-size:18px;color:var(--gold);
+  text-align:center;margin-bottom:5px;line-height:2}
+.conf-sub{font-size:12px;color:var(--text2);text-align:center;margin-bottom:16px;line-height:2}
+.conf-btns{display:flex;gap:10px}
+.cbtn{flex:1;border:0;border-radius:12px;padding:11px;font-family:inherit;
+  font-size:14px;cursor:pointer;font-weight:700;line-height:1.6}
+.cbtn.yes{background:var(--red);color:#fff}
+.cbtn.no{background:rgba(100,100,100,.5);color:#fff}
+.cbtn:active{transform:scale(.96)}
+</style>
+</head>
+<body>
+
+<div class="aurora">
+  <div class="al a1"></div><div class="al a2"></div><div class="al a3"></div>
+</div>
+<div class="stars" id="stars"></div>
+
+<!-- ========== SCREEN 1: LIST ========== -->
+<div class="screen active" id="screenList">
+  <div class="hdr">
+    <div class="app-name">ہمراز ساتھی</div>
+    <div class="app-sub">آپ کا ذاتی راز دار ساتھی</div>
+  </div>
+  <div class="sbar">
+    <div class="sdot"></div>
+    <div class="stxt" id="listStatus">ہمراز تیار ہے، سر!</div>
+  </div>
+  <div class="vsel-wrap">
+    <span class="vsel-label">AI کی آواز:</span>
+    <button class="vbtn on" id="vF" onclick="setVoice('f')">👩 خاتون</button>
+    <button class="vbtn" id="vM" onclick="setVoice('m')">👨 مرد</button>
+  </div>
+  <div class="lwrap">
+    <div class="list-title">25 ذاتی یادداشتیں</div>
+    <div id="memList"></div>
+  </div>
+</div>
+
+<!-- ========== SCREEN 2: DETAIL ========== -->
+<div class="screen" id="screenDetail">
+  <div class="hdr">
+    <div class="hdr-row">
+      <button class="back-btn" onclick="goBack()">◀ واپس</button>
+      <div class="app-name" id="detailTitle" style="font-size:18px"></div>
+      <button class="del-btn" onclick="askDelete()">🗑 مٹائیں</button>
+    </div>
+  </div>
+  <div class="sbar">
+    <div class="sdot"></div>
+    <div class="stxt" id="detailStatus">ہمراز تیار ہے، سر!</div>
+  </div>
+
+  <div class="detail-body">
+
+    <!-- Saved note display -->
+    <div class="note-box" id="noteBox">
+      <div class="note-box-label">محفوظ یادداشت:</div>
+      <div id="noteText" class="note-box-empty">ابھی کوئی یادداشت محفوظ نہیں۔ نیچے مائک دبا کر بتائیں۔</div>
+    </div>
+
+    <!-- Status -->
+    <div class="detail-status" id="detailStatusBadge">🕐 کام باقی ہے</div>
+
+    <!-- Big mic -->
+    <div class="big-mic-wrap">
+      <div class="mic-hint" id="micHint">مائک دبائیں اور بات کریں</div>
+      <button class="big-mic" id="bigMic" onclick="onMic()">🎤</button>
+      <div class="listen-txt" id="listenTxt"></div>
+    </div>
+
+    <!-- AI speaking waves -->
+    <div class="ai-waves" id="aiWaves">
+      <div class="wv"></div><div class="wv"></div><div class="wv"></div>
+      <div class="wv"></div><div class="wv"></div><div class="wv"></div>
+      <div class="wv"></div>
+    </div>
+
+    <!-- Mark done -->
+    <button class="done-toggle" id="doneBtn" onclick="toggleDone()">✅ کام ہو گیا</button>
+
+  </div>
+</div>
+
+<!-- Confirm delete overlay -->
+<div class="conf-ov" id="confOv">
+  <div class="conf-box">
+    <div class="conf-title" id="confTitle">یادداشت مٹائیں؟</div>
+    <div class="conf-sub">کیا آپ واقعی اس یادداشت کی تمام محفوظ معلومات مٹانا چاہتے ہیں؟</div>
+    <div class="conf-btns">
+      <button class="cbtn yes" onclick="confirmDelete()">🗑 ہاں، مٹائیں</button>
+      <button class="cbtn no" onclick="closeConf()">نہیں رہنے دیں</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== 25 MEMORIES ==========
+const MEM=[
+  {id:1,n:'گاڑی کی چابی'},
+  {id:2,n:'گھر کی چابی'},
+  {id:3,n:'بٹوا'},
+  {id:4,n:'اہم فائل'},
+  {id:5,n:'موبائل چارجر'},
+  {id:6,n:'کوئی چیز رکھنی ہے'},
+  {id:7,n:'کسی کو چیز دینی ہے'},
+  {id:8,n:'دوست کی سالگرہ'},
+  {id:9,n:'رشتہ دار کی سالگرہ'},
+  {id:10,n:'شادی کی سالگرہ'},
+  {id:11,n:'مبارک باد دینی ہے'},
+  {id:12,n:'ملاقات کرنی ہے'},
+  {id:13,n:'فون کرنا ہے'},
+  {id:14,n:'پیغام بھیجنا ہے'},
+  {id:15,n:'چیز خریدنی ہے'},
+  {id:16,n:'رقم ادا کرنی ہے'},
+  {id:17,n:'رقم وصول کرنی ہے'},
+  {id:18,n:'دستاویز جمع کرانی ہے'},
+  {id:19,n:'کام کی آخری تاریخ'},
+  {id:20,n:'ضروری کام'},
+  {id:21,n:'صبح کی دوا'},
+  {id:22,n:'دوپہر کی دوا'},
+  {id:23,n:'رات کی دوا'},
+  {id:24,n:'ڈاکٹر کی اپائنٹمنٹ'},
+  {id:25,n:'کوئی بھی ذاتی یاددہانی'}
+];
+
+// ========== STATE ==========
+// ST[id] = { note: string, done: bool }
+let ST = JSON.parse(localStorage.getItem('hmrz_v2') || '{}');
+let VC = localStorage.getItem('hmrz_vc') || 'f';
+let currentId = null;
+let busy = false;
+
+function saveST(){ localStorage.setItem('hmrz_v2', JSON.stringify(ST)); }
+
+// ========== STARS ==========
+(function(){
+  const c=document.getElementById('stars');
+  for(let i=0;i<60;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=(Math.random()*2+1).toFixed(1);
+    s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;--d:${(Math.random()*3+1.5).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s`;
+    c.appendChild(s);
+  }
+})();
+
+// ========== VOICE ==========
+function setVoice(v){
+  VC=v; localStorage.setItem('hmrz_vc',v);
+  document.getElementById('vF').classList.toggle('on',v==='f');
+  document.getElementById('vM').classList.toggle('on',v==='m');
+}
+setVoice(VC);
+
+// TTS unlock on first touch
+let ttsOK=false;
+document.addEventListener('pointerdown',()=>{
+  if(!ttsOK&&window.speechSynthesis){
+    ttsOK=true;
+    try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);}catch(e){}
+  }
+},{once:true,capture:true});
+if(window.speechSynthesis){
+  try{speechSynthesis.getVoices();}catch(e){}
+  speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
+}
+
+function getVoice(){
+  if(!window.speechSynthesis)return null;
+  const all=speechSynthesis.getVoices();
+  const ur=all.filter(v=>/^ur/i.test(v.lang));
+  if(!ur.length)return null;
+  if(VC==='f') return ur.find(v=>/female|woman/i.test(v.name))||ur[0];
+  return ur.find(v=>/male|man/i.test(v.name)&&!/female/i.test(v.name))||ur[1]||ur[0];
+}
+
+function speak(text, onDone){
+  if(!window.speechSynthesis){if(onDone)onDone();return;}
+  speechSynthesis.cancel();
+  document.getElementById('aiWaves').classList.add('show');
+  const run=()=>{
+    const v=getVoice();
+    const u=new SpeechSynthesisUtterance(text);
+    if(v){u.voice=v;u.lang=v.lang;}else u.lang='ur-PK';
+    if(VC==='f'){u.rate=0.80;u.pitch=1.25;u.volume=0.82;}
+    else{u.rate=0.84;u.pitch=0.92;u.volume=1.0;}
+    u.onend=()=>{document.getElementById('aiWaves').classList.remove('show');if(onDone)onDone();};
+    u.onerror=()=>{document.getElementById('aiWaves').classList.remove('show');if(onDone)onDone();};
+    speechSynthesis.speak(u);
+  };
+  if(speechSynthesis.speaking||speechSynthesis.pending){speechSynthesis.cancel();setTimeout(run,150);}else run();
+}
+
+// ========== DETECT INTENT ==========
+// Returns: 'save' | 'query' | 'delete' | 'done' | 'unknown'
+function detectIntent(text){
+  const t = text;
+  // delete intent
+  if(/مٹا|حذف|ختم کر|مٹادو|ہٹا|ختم کردو|نہیں چاہیے|ضرورت نہیں|بھول جا|مٹا دو/.test(t)) return 'delete';
+  // done intent
+  if(/مکمل ہو گیا|ہو گیا|کر لیا|مل گئی|مل گیا|پہنچ گیا|دے دی|دے دیا|بھیج دیا|ادا کر دی|وصول کر لی/.test(t)) return 'done';
+  // query intent
+  if(/کہاں|کب|کون|کیا ہے|کیسے|بتاؤ|بتائیں|یاد ہے|یاد دلا|کس نے|کیا تھا|ہے کیا/.test(t)) return 'query';
+  // save intent — if none of above, treat as save if has content
+  if(t.length > 5) return 'save';
+  return 'unknown';
+}
+
+// ========== AI RESPONSE BUILDER ==========
+function aiRespond(intent, memName, speech, currentNote){
+  if(intent === 'query'){
+    if(currentNote){
+      return `سر، آپ نے بتایا تھا کہ: "${currentNote}"`;
+    } else {
+      return `سر، ${memName} کے بارے میں ابھی میرے پاس کوئی محفوظ یادداشت نہیں ہے۔`;
+    }
+  }
+  if(intent === 'save'){
+    return `جی سر، یاد رکھ لیا۔`;
+  }
+  if(intent === 'done'){
+    return `جی سر، کام ہو گیا — نشان لگا دیا ہے۔ یادداشت مٹانی ہو تو اوپر مٹائیں بٹن دبائیں۔`;
+  }
+  if(intent === 'delete'){
+    return `جی سر، یہ یادداشت مٹا دی ہے۔`;
+  }
+  return `جی سر، آپ کی بات سمجھ گیا۔`;
+}
+
+// ========== MIC ==========
+function onMic(){
+  if(busy) return;
+
+  if(!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)){
+    setDetailStatus('Chrome براؤزر استعمال کریں۔');
+    speak('سر، اس براؤزر میں آواز کی سہولت موجود نہیں ہے۔ Chrome استعمال کریں۔');
+    return;
+  }
+
+  busy = true;
+  const btn = document.getElementById('bigMic');
+  setDetailStatus('اجازت مانگ رہا ہوں...');
+  document.getElementById('listenTxt').textContent = '⏳ ایک لمحہ...';
+  document.getElementById('listenTxt').className = 'listen-txt';
+
+  // پہلے getUserMedia سے اجازت لو — Chrome popup آئے گا
+  navigator.mediaDevices.getUserMedia({audio:true})
+    .then(stream => {
+      // اجازت مل گئی — stream بند کرو، SpeechRecognition شروع کرو
+      stream.getTracks().forEach(t => t.stop());
+      startListening(btn);
+    })
+    .catch(err => {
+      busy = false;
+      btn.classList.remove('listening');
+      document.getElementById('listenTxt').textContent = '';
+      setDetailStatus('مائک کی اجازت نہیں ملی۔');
+      speak('سر، مائک کی اجازت نہیں ملی۔ براہ کرم Chrome میں مائک کی اجازت دیں۔');
+    });
+}
+
+function startListening(btn){
+  btn.classList.add('listening');
+  document.getElementById('listenTxt').textContent = '🔴 بولیں سر، سن رہا ہوں...';
+  document.getElementById('listenTxt').className = 'listen-txt red';
+  setDetailStatus('سن رہا ہوں...');
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const rec = new SR();
+  rec.lang = 'ur-PK';
+  rec.continuous = false;
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+  let gotResult = false;
+
+  function resetMicUI(){
+    busy = false;
+    btn.classList.remove('listening');
+    document.getElementById('listenTxt').textContent = '';
+    document.getElementById('listenTxt').className = 'listen-txt';
+    setDetailStatus('ہمراز تیار ہے، سر!');
+  }
+
+  function processResult(speech){
+    btn.classList.remove('listening');
+    document.getElementById('listenTxt').textContent = `آپ نے کہا: "${speech}"`;
+    document.getElementById('listenTxt').className = 'listen-txt';
+    setDetailStatus('جواب آ رہا ہے...');
+
+    const intent = detectIntent(speech);
+    const mem = MEM.find(m => m.id === currentId);
+    if(!ST[currentId]) ST[currentId] = {note:'', done:false};
+    let reply = '';
+
+    if(intent === 'save'){
+      ST[currentId].note = speech;
+      saveST();
+      reply = aiRespond('save', mem.n, speech, speech);
+      refreshDetail();
+      renderList();
+    } else if(intent === 'query'){
+      reply = aiRespond('query', mem.n, speech, ST[currentId].note);
+    } else if(intent === 'done'){
+      ST[currentId].done = true;
+      saveST();
+      reply = aiRespond('done', mem.n, speech, ST[currentId].note);
+      refreshDetail();
+      renderList();
+    } else if(intent === 'delete'){
+      ST[currentId].note = '';
+      ST[currentId].done = false;
+      saveST();
+      reply = aiRespond('delete', mem.n, speech, '');
+      refreshDetail();
+      renderList();
+    } else {
+      reply = `سر، آپ کی بات سمجھ نہیں آئی۔ دوبارہ کوشش کریں۔`;
+    }
+
+    busy = false;
+    setDetailStatus('ہمراز تیار ہے، سر!');
+    speak(reply);
+  }
+
+  rec.onresult = (e) => {
+    gotResult = true;
+    const speech = e.results[e.results.length-1][0].transcript.trim();
+    if(speech) processResult(speech);
+    else resetMicUI();
+  };
+
+  rec.onerror = (e) => {
+    gotResult = true;
+    resetMicUI();
+    if(e.error === 'no-speech'){
+      speak('سر، کچھ سنائی نہیں دیا۔ دوبارہ کوشش کریں۔');
+    } else if(e.error === 'not-allowed'){
+      speak('سر، مائک کی اجازت درکار ہے۔ براہ کرم اجازت دیں۔');
+    }
+  };
+
+  rec.onend = () => {
+    if(!gotResult) resetMicUI();
+  };
+
+  rec.start();
+}
+
+
+// ========== DONE TOGGLE ==========
+function toggleDone(){
+  if(!ST[currentId]) ST[currentId] = {note:'', done:false};
+  ST[currentId].done = !ST[currentId].done;
+  saveST();
+  refreshDetail();
+  renderList();
+  const msg = ST[currentId].done
+    ? 'جی سر، کام ہو گیا نشان لگا دیا!'
+    : 'جی سر، کام باقی ہے کر دیا!';
+  speak(msg);
+}
+
+// ========== DELETE ==========
+function askDelete(){
+  const mem = MEM.find(m=>m.id===currentId);
+  document.getElementById('confTitle').textContent = `"${mem.n}" مٹائیں؟`;
+  document.getElementById('confOv').style.display='flex';
+}
+function closeConf(){
+  document.getElementById('confOv').style.display='none';
+}
+function confirmDelete(){
+  if(ST[currentId]){
+    ST[currentId].note = '';
+    ST[currentId].done = false;
+    saveST();
+  }
+  closeConf();
+  refreshDetail();
+  renderList();
+  speak('جی سر، یہ یادداشت مٹا دی ہے۔');
+}
+document.getElementById('confOv').addEventListener('click', function(e){
+  if(e.target===this) closeConf();
+});
+
+// ========== NAVIGATION ==========
+function openDetail(id){
+  currentId = id;
+  const mem = MEM.find(m=>m.id===id);
+  document.getElementById('detailTitle').textContent = mem.n;
+  refreshDetail();
+  document.getElementById('screenList').classList.remove('active');
+  document.getElementById('screenDetail').classList.add('active');
+  document.getElementById('screenDetail').scrollTop = 0;
+}
+
+function goBack(){
+  if(busy && window.speechSynthesis) speechSynthesis.cancel();
+  busy = false;
+  document.getElementById('bigMic').classList.remove('listening');
+  document.getElementById('listenTxt').textContent = '';
+  document.getElementById('aiWaves').classList.remove('show');
+  document.getElementById('screenDetail').classList.remove('active');
+  document.getElementById('screenList').classList.add('active');
+  renderList();
+}
+
+// ========== REFRESH DETAIL ==========
+function refreshDetail(){
+  const s = ST[currentId] || {note:'', done:false};
+  const noteEl = document.getElementById('noteText');
+  const badge = document.getElementById('detailStatusBadge');
+  const doneBtn = document.getElementById('doneBtn');
+
+  if(s.note){
+    noteEl.className = 'note-box-text';
+    noteEl.textContent = s.note;
+  } else {
+    noteEl.className = 'note-box-empty';
+    noteEl.textContent = 'ابھی کوئی یادداشت محفوظ نہیں۔ نیچے مائک دبا کر بتائیں۔';
+  }
+
+  if(s.done){
+    badge.textContent = '✅ کام ہو گیا';
+    badge.className = 'detail-status done-status';
+    doneBtn.textContent = '↩ ابھی باقی ہے';
+    doneBtn.className = 'done-toggle undone';
+  } else {
+    badge.textContent = '🕐 کام باقی ہے';
+    badge.className = 'detail-status';
+    doneBtn.textContent = '✅ کام ہو گیا';
+    doneBtn.className = 'done-toggle';
+  }
+}
+
+function setDetailStatus(txt){
+  document.getElementById('detailStatus').textContent = txt;
+}
+
+// ========== RENDER LIST ==========
+function renderList(){
+  const w = document.getElementById('memList');
+  let h = '';
+  MEM.forEach(m => {
+    const s = ST[m.id] || {};
+    const hasNote = !!(s.note);
+    const isDone = !!(s.done);
+    let badgeHtml = '';
+    if(isDone) badgeHtml = `<span class="mbadge done">✅ ہو گیا</span>`;
+    else if(hasNote) badgeHtml = `<span class="mbadge saved">محفوظ</span>`;
+
+    h += `<div class="mcard${hasNote?' has-note':''}${isDone?' is-done':''}" onclick="openDetail(${m.id})">
+      <div class="mnum">${m.id}</div>
+      <div class="minfo">
+        <div class="mname">${m.n}</div>
+        ${hasNote ? `<div class="mnote-preview">${s.note}</div>` : ''}
+      </div>
+      ${badgeHtml}
+      <div class="marrow">◀</div>
+    </div>`;
+  });
+  w.innerHTML = h;
+}
+
+// ========== INIT ==========
+renderList();
+</script>
+</body>
+</html>
