@@ -118,8 +118,9 @@ body{font-family:'Noto Nastaliq Urdu','Noto Naskh Arabic',serif;color:var(--text
 .mbadge.done{background:rgba(34,197,94,0.2);color:var(--green2);border:1px solid rgba(34,197,94,0.3)}
 
 /* Voice selector */
-.vsel-wrap{padding:10px 12px;display:flex;align-items:center;justify-content:center;gap:8px;
+.vsel-wrap{padding:10px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;
   background:rgba(6,9,26,0.5);border-bottom:1px solid rgba(124,58,237,0.1);flex-shrink:0}
+.vsel-top{display:flex;align-items:center;justify-content:center;gap:8px;width:100%}
 .vsel-label{font-size:11px;color:var(--text2)}
 .vbtn{background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);
   border-radius:20px;padding:4px 12px;color:var(--mic2);font-size:11px;
@@ -127,6 +128,17 @@ body{font-family:'Noto Nastaliq Urdu','Noto Naskh Arabic',serif;color:var(--text
 .vbtn.on{background:rgba(124,58,237,0.5);border-color:var(--mic2);color:#fff;
   box-shadow:0 0 10px rgba(124,58,237,0.4)}
 .vbtn:active{transform:scale(.92)}
+
+/* Download Progress */
+.dl-wrap{width:100%;display:none;flex-direction:column;gap:4px;padding:0 4px}
+.dl-wrap.show{display:flex}
+.dl-top{display:flex;justify-content:space-between;align-items:center}
+.dl-label{font-size:10px;color:var(--mic2)}
+.dl-pct{font-size:10px;color:var(--gold);font-weight:700}
+.dl-bar-bg{width:100%;height:6px;background:rgba(124,58,237,0.15);border-radius:10px;overflow:hidden}
+.dl-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--mic),var(--mic2));
+  border-radius:10px;transition:width 0.3s ease;box-shadow:0 0 8px rgba(124,58,237,0.5)}
+.dl-speed{font-size:9px;color:var(--text2);text-align:center}
 
 /* DETAIL SCREEN */
 .detail-body{flex:1;display:flex;flex-direction:column;align-items:center;
@@ -269,9 +281,21 @@ body{font-family:'Noto Nastaliq Urdu','Noto Naskh Arabic',serif;color:var(--text
     <div class="stxt" id="listStatus">تیار ہوں، حکم کریں!</div>
   </div>
   <div class="vsel-wrap">
-    <span class="vsel-label">🎙️ آواز:</span>
-    <button class="vbtn on" id="vF" style="cursor:default">👩 Aegis Female (اردو)</button>
-    <span id="piperStatus" style="font-size:10px;color:var(--text2)">⏳ لوڈ ہو رہی ہے...</span>
+    <div class="vsel-top">
+      <span class="vsel-label">🎙️ آواز:</span>
+      <button class="vbtn on" id="vF" style="cursor:default">👩 Aegis Female (اردو)</button>
+      <span id="piperStatus" style="font-size:10px;color:var(--text2)">⏳ لوڈ ہو رہی ہے...</span>
+    </div>
+    <div class="dl-wrap" id="dlWrap">
+      <div class="dl-top">
+        <span class="dl-label">📥 آواز ڈاؤن لوڈ ہو رہی ہے...</span>
+        <span class="dl-pct" id="dlPct">0%</span>
+      </div>
+      <div class="dl-bar-bg">
+        <div class="dl-bar" id="dlBar"></div>
+      </div>
+      <div class="dl-speed" id="dlSpeed">ابھی شروع ہو رہی ہے...</div>
+    </div>
   </div>
 
   <!-- HOME MIC BAR -->
@@ -425,8 +449,6 @@ function saveST(){ localStorage.setItem('ssm_v1', JSON.stringify(ST)); }
 // ========== VOICE ==========
 function setVoice(v){
   VC=v; localStorage.setItem('ssm_vc',v);
-  document.getElementById('vF').classList.toggle('on',v==='f');
-  document.getElementById('vM').classList.toggle('on',v==='m');
 }
 setVoice(VC);
 
@@ -436,21 +458,99 @@ let piperLoading = false;
 let piperReady = false;
 let piperQueue = [];
 
+function updateProgress(loaded, total, startTime){
+  const dlWrap = document.getElementById('dlWrap');
+  const dlBar  = document.getElementById('dlBar');
+  const dlPct  = document.getElementById('dlPct');
+  const dlSpd  = document.getElementById('dlSpeed');
+  if(!dlWrap) return;
+  dlWrap.classList.add('show');
+  const pct = total ? Math.round((loaded/total)*100) : 0;
+  dlBar.style.width = pct + '%';
+  dlPct.textContent = pct + '%';
+  const elapsed = (Date.now() - startTime) / 1000;
+  if(elapsed > 0.5 && loaded > 0){
+    const kbps = Math.round((loaded/1024) / elapsed);
+    const remaining = total ? Math.round(((total-loaded)/1024) / kbps) : '?';
+    const mb = (loaded/1024/1024).toFixed(1);
+    const totalMb = total ? (total/1024/1024).toFixed(1) : '?';
+    dlSpd.textContent = `${mb} MB / ${totalMb} MB — ${kbps} KB/s — ${remaining} سیکنڈ باقی`;
+  }
+}
+
+function hideProgress(){
+  const dlWrap = document.getElementById('dlWrap');
+  if(dlWrap){
+    document.getElementById('dlBar').style.width = '100%';
+    document.getElementById('dlPct').textContent = '100%';
+    document.getElementById('dlSpeed').textContent = '✅ مکمل! آواز تیار ہے۔';
+    setTimeout(()=>{ dlWrap.classList.remove('show'); }, 2500);
+  }
+}
+
+async function downloadWithProgress(url){
+  const startTime = Date.now();
+  const res = await fetch(url);
+  if(!res.ok) throw new Error('download failed');
+  const total = parseInt(res.headers.get('content-length') || '0');
+  const reader = res.body.getReader();
+  const chunks = [];
+  let loaded = 0;
+  while(true){
+    const {done, value} = await reader.read();
+    if(done) break;
+    chunks.push(value);
+    loaded += value.length;
+    updateProgress(loaded, total, startTime);
+  }
+  const all = new Uint8Array(loaded);
+  let pos = 0;
+  for(const chunk of chunks){ all.set(chunk, pos); pos += chunk.length; }
+  return all.buffer;
+}
+
 async function initPiper(){
   if(piperReady || piperLoading) return;
   piperLoading = true;
+  const st = document.getElementById('piperStatus');
+  const dlWrap = document.getElementById('dlWrap');
+  if(dlWrap) dlWrap.classList.add('show');
+
   try {
-    // pipertts UMD build از CDN
-    const { PiperNativeTTS } = await import('https://cdn.jsdelivr.net/npm/pipertts@latest/dist/index.js');
+    const ONNX_URL = 'https://huggingface.co/rhasspy/piper-voices/resolve/main/ur/ur_PK/aegis_female/medium/ur_PK-aegis_female-medium.onnx';
+    const JSON_URL = 'https://huggingface.co/rhasspy/piper-voices/resolve/main/ur/ur_PK/aegis_female/medium/ur_PK-aegis_female-medium.onnx.json';
+
+    // کیا پہلے سے cache میں ہے؟
+    const cache = await caches.open('piper-aegis-v1');
+    let onnxResp = await cache.match(ONNX_URL);
+    let jsonResp = await cache.match(JSON_URL);
+
+    if(!onnxResp){
+      if(st) st.textContent = '📥 ڈاؤن لوڈ ہو رہی ہے...';
+      const onnxBuf = await downloadWithProgress(ONNX_URL);
+      await cache.put(ONNX_URL, new Response(onnxBuf));
+      hideProgress();
+    } else {
+      if(st) st.textContent = '⚡ Cache سے لوڈ...';
+    }
+
+    if(!jsonResp){
+      const jsonBuf = await downloadWithProgress(JSON_URL);
+      await cache.put(JSON_URL, new Response(jsonBuf));
+    }
+
+    // pipertts load
+    const { PiperNativeTTS } = await import('https://cdn.jsdelivr.net/npm/pipertts/dist/index.js');
     piperTTS = await PiperNativeTTS.load({
       model: 'hub:aegis-female-ur-pk-medium',
       modelsDir: '/piper-models',
     });
+
     piperReady = true;
     piperLoading = false;
-    const st = document.getElementById('piperStatus');
     if(st) st.textContent = '✅ تیار ہے';
-    // queue میں جو جملے انتظار میں تھے وہ چلاؤ
+    hideProgress();
+
     while(piperQueue.length){
       const {text, onDone} = piperQueue.shift();
       await _piperSpeak(text, onDone);
@@ -458,9 +558,9 @@ async function initPiper(){
   } catch(e){
     piperLoading = false;
     console.warn('Piper load failed, fallback to browser TTS', e);
-    const st = document.getElementById('piperStatus');
     if(st) st.textContent = '⚠️ browser آواز';
-    // fallback: browser TTS
+    if(document.getElementById('dlWrap'))
+      document.getElementById('dlWrap').classList.remove('show');
     piperReady = false;
     piperTTS = null;
     while(piperQueue.length){
