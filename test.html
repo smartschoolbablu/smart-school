@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body style="background:#111;color:white;padding:20px;font-family:arial">
+
+<h2>آواز ٹیسٹ</h2>
+
+<textarea id="txt" rows="4" style="width:100%;font-size:18px;padding:10px" 
+placeholder="یہاں اردو لکھیں..."></textarea>
+
+<br><br>
+
+<button onclick="speak('ur-PK-UzmaNeural')" 
+style="padding:15px;background:pink;font-size:16px;margin:5px">
+عظمیٰ کی آواز
+</button>
+
+<button onclick="speak('ur-PK-AsadNeural')" 
+style="padding:15px;background:lightblue;font-size:16px;margin:5px">
+اسد کی آواز
+</button>
+
+<script>
+function speak(voice) {
+  const text = document.getElementById('txt').value;
+  const audio = new Audio(
+    `https://tts.deno.dev/tts?voice=${voice}&text=${encodeURIComponent(text)}`
+  );
+  audio.play();
+}
+</script>
+
+</body>
+</html>
