@@ -3,456 +3,922 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>موسم کا حال</title>
+<title>Smart School Memory</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Playfair+Display:wght@400;700&family=Merriweather:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gulzar&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg1:#0a0a1a;--bg2:#0d1b3e;
-  --gold:#e8c86a;--gold2:#f5e09a;
-  --text:#f0e8d0;--text2:#c8bfa0;
+  --bg:#06091a;--gold:#e8c86a;--gold2:#f5e09a;
+  --text:#f0e8d0;--text2:#a09880;
+  --card:rgba(255,255,255,0.04);--card-b:rgba(255,255,255,0.09);
   --green:#16a34a;--green2:#22c55e;
-  --red:#dc2626;--red2:#ef4444;
-  --purple:#7c3aed;--blue:#1a3a6e;
-  --card-bg:rgba(255,255,255,0.05);
-  --card-border:rgba(232,200,106,0.2);
+  --red:#dc2626;
+  --mic:#7c3aed;--mic2:#a78bfa;
+}
+html,body{height:100%;overflow-x:hidden;background:var(--bg);
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
-html,body{height:100%;background:var(--bg1);color:var(--text);overflow-x:hidden}
-body{font-family:'Noto Nastaliq Urdu','Noto Naskh Arabic',serif;min-height:100vh;position:relative;display:flex;flex-direction:column}
+body{font-family:'Noto Nastaliq Urdu','Noto Naskh Arabic',serif;color:var(--text);min-height:100vh;position:relative}
 
 /* Aurora */
-.aurora{position:fixed;width:100%;height:100%;top:0;left:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 80% 50% at 20% 10%,rgba(30,60,140,0.4) 0%,transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 80%,rgba(60,20,100,0.35) 0%,transparent 60%),
-    radial-gradient(ellipse 50% 35% at 50% 40%,rgba(10,80,120,0.25) 0%,transparent 70%),
-    radial-gradient(ellipse 30% 20% at 70% 20%,rgba(100,20,80,0.2) 0%,transparent 60%);
-  animation:auroraMove 14s ease-in-out infinite alternate}
-@keyframes auroraMove{0%{opacity:.7;transform:scale(1) rotate(0deg)}100%{opacity:1;transform:scale(1.06) rotate(1deg)}}
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.al{position:absolute;border-radius:50%;filter:blur(80px);animation:af 14s ease-in-out infinite alternate}
+.a1{width:70vw;height:60vh;top:-10%;right:-10%;background:radial-gradient(ellipse,rgba(99,60,200,0.35),transparent 70%)}
+.a2{width:60vw;height:50vh;bottom:-10%;left:-10%;background:radial-gradient(ellipse,rgba(20,80,180,0.3),transparent 70%);animation-delay:-5s}
+.a3{width:40vw;height:40vh;top:30%;left:30%;background:radial-gradient(ellipse,rgba(180,100,30,0.15),transparent 70%);animation-delay:-9s}
+@keyframes af{0%{transform:scale(1) translate(0,0)}100%{transform:scale(1.12) translate(3%,4%)}}
 
 /* Stars */
-.stars{position:fixed;width:100%;height:100%;top:0;left:0;z-index:0;pointer-events:none}
-.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d) ease-in-out infinite alternate}
-@keyframes twinkle{0%{opacity:0.1;transform:scale(0.8)}100%{opacity:0.7;transform:scale(1.2)}}
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+.star{position:absolute;border-radius:50%;background:#fff;animation:tw var(--d,2s) ease-in-out infinite alternate}
+@keyframes tw{0%{opacity:.1;transform:scale(1)}100%{opacity:.8;transform:scale(1.4)}}
 
-/* Layout */
-.container{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:center;padding:20px 16px 30px;max-width:480px;margin:0 auto;width:100%}
+/* SCREEN SYSTEM */
+.screen{position:fixed;inset:0;z-index:10;overflow-y:auto;display:none;flex-direction:column;background:var(--bg)}
+.screen.active{display:flex}
 
-/* Header */
-.lang-row{display:flex;justify-content:flex-start;gap:8px;width:100%;margin-bottom:16px}
-.lang-btn{background:rgba(232,200,106,0.12);border:1px solid rgba(232,200,106,0.3);border-radius:20px;padding:4px 14px;color:var(--gold2);font-size:12px;cursor:pointer;transition:all .2s;font-family:inherit}
-.lang-btn.active{background:rgba(232,200,106,0.3);border-color:var(--gold);color:var(--gold)}
-.lang-btn:active{transform:scale(.92)}
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:20;text-align:center;padding:14px 16px 10px;
+  background:rgba(6,9,26,0.85);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(232,200,106,0.15);flex-shrink:0}
+.hdr-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.app-name{font-family:'Gulzar',serif;font-size:24px;color:var(--gold);
+  animation:np 4s ease-in-out infinite alternate;flex:1;text-align:center}
+@keyframes np{0%{text-shadow:0 0 20px rgba(232,200,106,0.4)}100%{text-shadow:0 0 44px rgba(232,200,106,0.9),0 0 80px rgba(232,200,106,0.25)}}
+.app-sub{font-size:11px;color:var(--text2);margin-top:3px;line-height:1.8;text-align:center}
+.back-btn{background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);
+  border-radius:10px;padding:7px 12px;color:var(--mic2);font-size:12px;
+  cursor:pointer;font-family:inherit;line-height:1.6;white-space:nowrap;flex-shrink:0}
+.back-btn:active{transform:scale(.92)}
+.del-btn{background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.3);
+  border-radius:10px;padding:7px 12px;color:#fca5a5;font-size:12px;
+  cursor:pointer;font-family:inherit;line-height:1.6;white-space:nowrap;flex-shrink:0}
+.del-btn:active{transform:scale(.92)}
 
-.app-title{font-family:'Noto Nastaliq Urdu',serif;font-size:26px;color:var(--gold);text-shadow:0 0 20px rgba(232,200,106,0.5);margin-bottom:4px;text-align:center}
-.app-title.en{font-family:'Playfair Display',serif;font-size:24px}
-.app-subtitle{font-size:12px;color:var(--text2);text-align:center;margin-bottom:28px}
-.app-subtitle.en{font-family:'Merriweather',serif;font-size:11px}
+/* Status */
+.sbar{display:flex;align-items:center;justify-content:center;gap:7px;padding:7px;
+  background:rgba(124,58,237,0.07);border-bottom:1px solid rgba(124,58,237,0.12);flex-shrink:0}
+.sdot{width:7px;height:7px;border-radius:50%;background:var(--green2);animation:sp 1.5s infinite}
+@keyframes sp{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,.4)}50%{opacity:.7;box-shadow:0 0 0 5px rgba(34,197,94,0)}}
+.stxt{font-size:11px;color:var(--mic2)}
 
-/* Main weather button */
-.weather-btn{background:linear-gradient(135deg,rgba(30,60,140,0.8),rgba(60,20,100,0.8));border:2px solid rgba(232,200,106,0.4);border-radius:20px;padding:18px 36px;color:var(--gold2);font-family:'Noto Nastaliq Urdu',serif;font-size:18px;cursor:pointer;transition:all .3s;box-shadow:0 0 30px rgba(232,200,106,0.15);width:100%;position:relative;overflow:hidden}
-.weather-btn.en{font-family:'Playfair Display',serif;font-size:16px}
-.weather-btn:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(232,200,106,0.25);border-color:rgba(232,200,106,0.7)}
-.weather-btn:active{transform:scale(.97)}
-.weather-btn .btn-icon{font-size:28px;display:block;margin-bottom:6px}
-.weather-btn-shine{position:absolute;top:-50%;left:-60%;width:40%;height:200%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);transform:skewX(-20deg);animation:shine 3s infinite}
-@keyframes shine{0%{left:-60%}100%{left:150%}}
+/* HOME MIC BAR */
+.home-mic-bar{display:flex;align-items:center;justify-content:center;gap:16px;
+  padding:14px 16px;background:rgba(124,58,237,0.06);
+  border-bottom:1px solid rgba(124,58,237,0.15);flex-shrink:0}
+.home-mic-label{font-size:11px;color:var(--text2);text-align:center;line-height:1.8}
+.home-big-mic{width:62px;height:62px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(124,58,237,0.6),rgba(167,139,250,0.3));
+  border:2px solid rgba(167,139,250,0.5);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  transition:all .25s;position:relative;
+  box-shadow:0 0 24px rgba(124,58,237,0.35)}
+.home-big-mic::before{content:'';position:absolute;inset:-6px;border-radius:50%;
+  border:1px solid rgba(167,139,250,0.2);animation:pr 2s linear infinite}
+.home-big-mic:active{transform:scale(.92)}
+.home-small-mic{width:46px;height:46px;border-radius:50%;
+  background:rgba(124,58,237,0.2);border:1px solid rgba(167,139,250,0.4);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:20px;transition:all .25s}
+.home-small-mic:active{transform:scale(.88)}
+.home-small-mic.listening{background:rgba(220,38,38,0.4);border-color:#fca5a5;
+  box-shadow:0 0 20px rgba(220,38,38,0.5)}
+.home-ai-reply{padding:8px 16px;font-size:12px;color:var(--mic2);text-align:center;
+  line-height:2;min-height:32px;display:none}
+.home-ai-reply.show{display:block}
 
-/* Loading */
-.loading{display:none;text-align:center;margin:20px 0}
-.loading-dots{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
-.dot{width:10px;height:10px;border-radius:50%;background:var(--gold);animation:bounce 1.2s ease-in-out infinite}
-.dot:nth-child(2){animation-delay:.2s}
-.dot:nth-child(3){animation-delay:.4s}
-@keyframes bounce{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-12px);opacity:1}}
-.loading-text{font-size:13px;color:var(--text2)}
-.loading-text.en{font-family:'Merriweather',serif;font-size:11px}
+/* LIST SCREEN */
+.lwrap{position:relative;z-index:3;padding:12px 12px 40px;flex:1}
+.list-title{font-family:'Gulzar',serif;font-size:15px;color:var(--gold);
+  text-align:center;padding:8px 0 6px;opacity:.7}
 
-/* Result card */
-.result-card{display:none;width:100%;background:linear-gradient(135deg,rgba(20,40,100,0.6),rgba(40,10,70,0.5));border:2px solid rgba(232,200,106,0.35);border-radius:24px;padding:24px 20px;margin-top:20px;animation:fadeUp .5s ease}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+/* Card */
+.mcard{background:var(--card);border:1px solid var(--card-b);border-radius:16px;
+  padding:13px 14px;margin-bottom:9px;display:flex;align-items:center;gap:10px;
+  transition:all .25s;position:relative;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mcard::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(124,58,237,.04),transparent);pointer-events:none}
+.mcard:active{transform:scale(.98);border-color:rgba(167,139,250,0.4)}
+.mcard.has-note{border-color:rgba(167,139,250,0.35);background:rgba(124,58,237,0.06)}
+.mcard.is-done{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.05)}
+.mnum{width:28px;height:28px;border-radius:50%;background:rgba(124,58,237,0.2);
+  border:1px solid rgba(124,58,237,0.3);display:flex;align-items:center;
+  justify-content:center;font-size:11px;color:var(--mic2);flex-shrink:0}
+.minfo{flex:1;min-width:0}
+.mname{font-size:15px;color:var(--text);line-height:2}
+.mcard.is-done .mname{text-decoration:line-through;color:var(--text2)}
+.mnote-preview{font-size:10px;color:var(--mic2);line-height:1.6;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.marrow{font-size:16px;color:var(--text2);flex-shrink:0}
+.mbadge{font-size:9px;padding:2px 7px;border-radius:20px;flex-shrink:0;line-height:1.6}
+.mbadge.saved{background:rgba(124,58,237,0.25);color:var(--mic2);border:1px solid rgba(124,58,237,0.3)}
+.mbadge.done{background:rgba(34,197,94,0.2);color:var(--green2);border:1px solid rgba(34,197,94,0.3)}
 
-.date-row{text-align:center;margin-bottom:16px}
-.date-label{font-size:13px;color:var(--gold2)}
-.date-label.en{font-family:'Merriweather',serif;font-size:11px}
-.date-val{font-size:16px;color:var(--text);margin-top:2px}
-.date-val.en{font-family:'Playfair Display',serif;font-size:15px}
+/* Voice selector */
+.vsel-wrap{padding:10px 12px;display:flex;align-items:center;justify-content:center;gap:8px;
+  background:rgba(6,9,26,0.5);border-bottom:1px solid rgba(124,58,237,0.1);flex-shrink:0}
+.vsel-label{font-size:11px;color:var(--text2)}
+.vbtn{background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);
+  border-radius:20px;padding:4px 12px;color:var(--mic2);font-size:11px;
+  cursor:pointer;font-family:inherit;transition:all .2s;line-height:1.6}
+.vbtn.on{background:rgba(124,58,237,0.5);border-color:var(--mic2);color:#fff;
+  box-shadow:0 0 10px rgba(124,58,237,0.4)}
+.vbtn:active{transform:scale(.92)}
 
-.temp-row{display:flex;align-items:center;justify-content:center;gap:12px;margin:16px 0}
-.temp-icon{font-size:48px}
-.temp-num{font-size:64px;font-weight:700;color:var(--gold);font-family:'Playfair Display',serif;line-height:1;text-shadow:0 0 20px rgba(232,200,106,0.4)}
-.temp-unit{font-size:28px;color:var(--gold2);font-family:'Playfair Display',serif;align-self:flex-start;margin-top:10px}
+/* DETAIL SCREEN */
+.detail-body{flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:20px 16px 40px;position:relative;z-index:3;gap:16px}
+.detail-title{font-family:'Gulzar',serif;font-size:22px;color:var(--gold);
+  text-align:center;line-height:2;animation:np 4s ease-in-out infinite alternate}
 
-.location-row{text-align:center;margin-bottom:20px}
-.location-label{font-size:11px;color:var(--text2)}
-.location-label.en{font-family:'Merriweather',serif}
-.location-val{font-size:13px;color:var(--text2);margin-top:2px}
+/* Saved note box */
+.note-box{width:100%;background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.25);
+  border-radius:16px;padding:14px 16px;min-height:70px}
+.note-box-label{font-size:10px;color:var(--text2);margin-bottom:6px;line-height:1.6}
+.note-box-text{font-size:14px;color:var(--text);line-height:2.2}
+.note-box-empty{font-size:13px;color:var(--text2);line-height:2;text-align:center;padding:8px 0}
 
-.divider{height:1px;background:rgba(232,200,106,0.2);margin:16px 0}
+/* Status badge */
+.detail-status{padding:5px 16px;border-radius:20px;font-size:11px;line-height:1.8;
+  border:1px solid rgba(167,139,250,0.3);color:var(--mic2);background:rgba(124,58,237,0.1)}
+.detail-status.done-status{border-color:rgba(34,197,94,0.3);color:var(--green2);
+  background:rgba(34,197,94,0.1)}
 
-.msg-label{font-size:11px;color:var(--gold2);margin-bottom:10px;text-align:center}
-.msg-label.en{font-family:'Merriweather',serif}
-.urdu-msg{font-family:'Noto Nastaliq Urdu',serif;font-size:17px;color:var(--text);line-height:2.2;text-align:right;background:rgba(0,0,0,0.2);border-radius:14px;padding:14px 16px;border:1px solid rgba(232,200,106,0.15);direction:rtl}
+/* BIG MIC */
+.big-mic-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:4px}
+.mic-hint{font-size:12px;color:var(--text2);text-align:center;line-height:2}
+.big-mic{width:88px;height:88px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(124,58,237,0.6),rgba(167,139,250,0.3));
+  border:2px solid rgba(167,139,250,0.5);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:36px;
+  transition:all .25s;position:relative;
+  box-shadow:0 0 30px rgba(124,58,237,0.3)}
+.big-mic::before{content:'';position:absolute;inset:-8px;border-radius:50%;
+  border:1px solid rgba(167,139,250,0.2);animation:pr 2s linear infinite}
+@keyframes pr{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.15);opacity:0}}
+.big-mic:active{transform:scale(.92)}
+.small-mic{width:46px;height:46px;border-radius:50%;
+  background:rgba(124,58,237,0.2);border:1px solid rgba(167,139,250,0.4);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:20px;transition:all .25s;flex-shrink:0}
+.small-mic:active{transform:scale(.88)}
+.small-mic.listening{background:rgba(220,38,38,0.4);border-color:#fca5a5;
+  box-shadow:0 0 20px rgba(220,38,38,0.5)}
+.listen-txt{font-size:13px;color:var(--mic2);text-align:center;line-height:2;min-height:28px}
+.listen-txt.red{color:#fca5a5}
 
-/* Device ID badge */
-.device-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(124,58,237,0.2);border:1px solid rgba(167,139,250,0.3);border-radius:20px;padding:3px 10px;font-size:10px;color:rgba(167,139,250,0.8);margin-top:16px}
-.device-badge.en{font-family:'Merriweather',serif}
+/* AI waves */
+.ai-waves{display:flex;align-items:center;justify-content:center;gap:5px;
+  height:36px;opacity:0;transition:opacity .3s}
+.ai-waves.show{opacity:1}
+.wv{width:4px;border-radius:4px;background:var(--mic2);
+  animation:wva .8s ease-in-out infinite alternate}
+.wv:nth-child(1){height:8px;animation-delay:0s}
+.wv:nth-child(2){height:18px;animation-delay:.1s}
+.wv:nth-child(3){height:28px;animation-delay:.2s}
+.wv:nth-child(4){height:14px;animation-delay:.3s}
+.wv:nth-child(5){height:22px;animation-delay:.4s}
+.wv:nth-child(6){height:10px;animation-delay:.5s}
+.wv:nth-child(7){height:20px;animation-delay:.6s}
+@keyframes wva{0%{transform:scaleY(.4);opacity:.5}100%{transform:scaleY(1);opacity:1}}
 
-/* Refresh button */
-.refresh-btn{margin-top:20px;background:rgba(232,200,106,0.1);border:1px solid rgba(232,200,106,0.3);border-radius:12px;padding:10px 24px;color:var(--gold2);font-family:'Noto Nastaliq Urdu',serif;font-size:14px;cursor:pointer;width:100%;transition:all .2s}
-.refresh-btn.en{font-family:'Merriweather',serif;font-size:12px}
-.refresh-btn:active{transform:scale(.96)}
+/* Keyboard input modal */
+.kb-modal{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,0.75);
+  display:none;align-items:flex-end;animation:fi .2s}
+.kb-modal.show{display:flex}
+.kb-box{background:#0d1b3e;border:1px solid rgba(232,200,106,.2);
+  border-radius:24px 24px 0 0;padding:20px 16px 30px;width:100%;animation:su .3s}
+@keyframes su{from{transform:translateY(100%)}to{transform:none}}
+.kb-title{font-family:'Gulzar',serif;font-size:16px;color:var(--gold);
+  text-align:center;margin-bottom:12px;line-height:2}
+.kb-textarea{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(167,139,250,0.3);
+  border-radius:12px;padding:12px 14px;color:var(--text);font-family:inherit;
+  font-size:14px;line-height:2;resize:none;min-height:80px;outline:none;direction:rtl}
+.kb-textarea:focus{border-color:rgba(167,139,250,0.6)}
+.kb-row{display:flex;gap:10px;margin-top:12px}
+.kb-save{flex:1;background:linear-gradient(135deg,rgba(124,58,237,0.7),rgba(167,139,250,0.5));
+  border:1px solid rgba(167,139,250,0.4);border-radius:12px;padding:10px;
+  color:#fff;font-family:inherit;font-size:14px;cursor:pointer;line-height:1.8}
+.kb-cancel{background:rgba(100,100,100,0.3);border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px;padding:10px 16px;color:var(--text2);font-family:inherit;
+  font-size:14px;cursor:pointer;line-height:1.8}
+.kb-save:active,.kb-cancel:active{transform:scale(.96)}
 
-/* Error */
-.error-box{display:none;background:rgba(220,38,38,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:16px;padding:16px;text-align:center;margin-top:20px;width:100%}
-.error-text{font-size:13px;color:var(--red2)}
-.error-text.en{font-family:'Merriweather',serif;font-size:11px}
+/* Reminder time row */
+.rem-row{display:flex;align-items:center;gap:10px;margin-top:10px;
+  background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);
+  border-radius:12px;padding:10px 14px}
+.rem-label{font-size:12px;color:var(--text2);flex-shrink:0;line-height:1.8}
+.rem-input{background:rgba(255,255,255,0.08);border:1px solid rgba(167,139,250,0.3);
+  border-radius:8px;padding:5px 10px;color:var(--text);font-family:inherit;
+  font-size:13px;flex:1;outline:none;text-align:center}
+.rem-input:focus{border-color:rgba(167,139,250,0.6)}
 
-/* Footer */
-.footer{text-align:center;margin-top:28px;font-size:10px;color:rgba(255,255,255,0.2)}
-.footer.en{font-family:'Merriweather',serif}
+/* Mark done button */
+.done-toggle{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);
+  border-radius:12px;padding:9px 20px;color:var(--green2);font-size:13px;
+  cursor:pointer;font-family:inherit;line-height:1.8;transition:all .2s}
+.done-toggle:active{transform:scale(.96)}
+.done-toggle.undone{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:var(--text2)}
 
-@media (prefers-reduced-motion:reduce){.aurora,.star,.dot,.weather-btn-shine{animation:none}}
+/* Reminder badge */
+.rem-badge{font-size:11px;color:var(--gold);background:rgba(232,200,106,0.1);
+  border:1px solid rgba(232,200,106,0.25);border-radius:20px;padding:3px 12px;
+  line-height:1.8;text-align:center}
+
+/* Confirm overlay */
+.conf-ov{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:50;
+  display:flex;align-items:flex-end;animation:fi .2s;display:none}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.conf-box{background:#0d1b3e;border:1px solid rgba(232,200,106,.25);
+  border-radius:24px 24px 0 0;padding:20px 16px 28px;width:100%;animation:su .3s}
+.conf-title{font-family:'Gulzar',serif;font-size:18px;color:var(--gold);
+  text-align:center;margin-bottom:5px;line-height:2}
+.conf-sub{font-size:12px;color:var(--text2);text-align:center;margin-bottom:16px;line-height:2}
+.conf-btns{display:flex;gap:10px}
+.cbtn{flex:1;border:0;border-radius:12px;padding:11px;font-family:inherit;
+  font-size:14px;cursor:pointer;font-weight:700;line-height:1.6}
+.cbtn.yes{background:var(--red);color:#fff}
+.cbtn.no{background:rgba(100,100,100,.5);color:#fff}
+.cbtn:active{transform:scale(.96)}
+
+/* Loading spinner */
+.ai-loading{font-size:11px;color:var(--text2);text-align:center;line-height:2;
+  display:none;padding:4px}
+.ai-loading.show{display:block}
 </style>
 </head>
 <body>
-<div class="aurora"></div>
-<div class="stars" id="starsContainer"></div>
 
-<div class="container">
-  <!-- Language buttons -->
-  <div class="lang-row">
-    <button class="lang-btn active" onclick="setLang('ur')" id="btnUr">🇵🇰 اردو</button>
-    <button class="lang-btn" onclick="setLang('en')" id="btnEn">🇬🇧 English</button>
+<div class="aurora">
+  <div class="al a1"></div><div class="al a2"></div><div class="al a3"></div>
+</div>
+<div class="stars" id="stars"></div>
+
+<!-- ========== SCREEN 1: LIST ========== -->
+<div class="screen active" id="screenList">
+  <div class="hdr">
+    <div class="app-name">Smart School Memory</div>
+    <div class="app-sub">آپ کا ذاتی راز دار ساتھی</div>
+  </div>
+  <div class="sbar">
+    <div class="sdot"></div>
+    <div class="stxt" id="listStatus">تیار ہوں، حکم کریں!</div>
+  </div>
+  <div class="vsel-wrap">
+    <span class="vsel-label">🎙️ آواز:</span>
+    <button class="vbtn on" id="vF" style="cursor:default">👩 Aegis Female (اردو)</button>
+    <span id="piperStatus" style="font-size:10px;color:var(--text2)">⏳ لوڈ ہو رہی ہے...</span>
   </div>
 
-  <!-- Title -->
-  <div class="app-title" id="appTitle">موسم کا حال</div>
-  <div class="app-subtitle" id="appSubtitle">آپ کے موبائل اور آج کے موسم کا خاص پیغام</div>
-
-  <!-- Main button -->
-  <button class="weather-btn" onclick="getWeather()" id="mainBtn">
-    <span class="weather-btn-shine"></span>
-    <span class="btn-icon">🌤️</span>
-    <span id="btnText">موسم کا حال دیکھیں</span>
-  </button>
-
-  <!-- Loading -->
-  <div class="loading" id="loading">
-    <div class="loading-dots">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-    </div>
-    <div class="loading-text" id="loadingText">موسم معلوم کر رہے ہیں...</div>
-  </div>
-
-  <!-- Error -->
-  <div class="error-box" id="errorBox">
-    <div class="error-text" id="errorText">❌ موسم معلوم نہیں ہو سکا۔ دوبارہ کوشش کریں۔</div>
-  </div>
-
-  <!-- Result card -->
-  <div class="result-card" id="resultCard">
-    <div class="date-row">
-      <div class="date-label" id="dateLbl">📅 تاریخ</div>
-      <div class="date-val" id="dateVal">—</div>
-    </div>
-
-    <div class="temp-row">
-      <div class="temp-icon" id="tempIcon">🌡️</div>
-      <div class="temp-num" id="tempNum">—</div>
-      <div class="temp-unit">°C</div>
-    </div>
-
-    <div class="location-row">
-      <div class="location-label" id="locLbl">📍 مقام</div>
-      <div class="location-val" id="locVal">—</div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="msg-label" id="msgLbl">✍️ آج کا پیغام</div>
-    <div class="urdu-msg" id="urduMsg">—</div>
-
+  <!-- HOME MIC BAR -->
+  <div class="home-mic-bar">
     <div style="text-align:center">
-      <span class="device-badge" id="deviceBadge">🔮 آپ کا خاص پیغام</span>
+      <div class="home-mic-label">⌨️ کی بورڈ سے پوچھیں</div>
+      <div style="margin-top:8px">
+        <button class="home-big-mic" id="homeBigMic" onclick="homeKbMic()">🎤</button>
+      </div>
+    </div>
+    <div style="text-align:center">
+      <div class="home-mic-label" id="homeSmallLabel">🎙️ بول کر پوچھیں</div>
+      <div style="margin-top:8px">
+        <button class="home-small-mic" id="homeSmallMic" onclick="homeVoiceMic()">🎙️</button>
+      </div>
     </div>
   </div>
+  <div class="home-ai-reply" id="homeAiReply"></div>
+  <div class="ai-loading" id="homeLoading">⏳ جواب آ رہا ہے...</div>
 
-  <!-- Refresh -->
-  <button class="refresh-btn" id="refreshBtn" style="display:none" onclick="getWeather()">
-    🔄 <span id="refreshText">دوبارہ دیکھیں</span>
-  </button>
+  <div class="lwrap">
+    <div class="list-title">25 ذاتی یادداشتیں</div>
+    <div id="memList"></div>
+  </div>
+</div>
 
-  <div class="footer" id="footer">Open-Meteo API · GPS Location</div>
+<!-- ========== SCREEN 2: DETAIL ========== -->
+<div class="screen" id="screenDetail">
+  <div class="hdr">
+    <div class="hdr-row">
+      <button class="back-btn" onclick="goBack()">◀ واپس</button>
+      <div class="app-name" id="detailTitle" style="font-size:18px"></div>
+      <button class="del-btn" onclick="askDelete()">🗑 مٹائیں</button>
+    </div>
+  </div>
+  <div class="sbar">
+    <div class="sdot"></div>
+    <div class="stxt" id="detailStatus">تیار ہوں، حکم کریں!</div>
+  </div>
+
+  <div class="detail-body">
+    <div class="note-box" id="noteBox">
+      <div class="note-box-label">محفوظ یادداشت:</div>
+      <div id="noteText" class="note-box-empty">ابھی کوئی یادداشت نہیں۔ نیچے مائک دبائیں۔</div>
+    </div>
+
+    <div id="remBadge" style="display:none" class="rem-badge"></div>
+    <div class="detail-status" id="detailStatusBadge">🕐 کام باقی ہے</div>
+    <div class="ai-loading" id="detailLoading">⏳ سوچ رہا ہوں...</div>
+
+    <!-- Big mic -->
+    <div class="big-mic-wrap">
+      <div class="mic-hint">بڑا مائک = کی بورڈ &nbsp;|&nbsp; چھوٹا مائک = آواز</div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <button class="big-mic" id="bigMic" onclick="onMicKeyboard()">🎤</button>
+        <button class="small-mic" id="smallMic" onclick="onMicToggle()">🎙️</button>
+      </div>
+      <div class="listen-txt" id="listenTxt"></div>
+    </div>
+
+    <div class="ai-waves" id="aiWaves">
+      <div class="wv"></div><div class="wv"></div><div class="wv"></div>
+      <div class="wv"></div><div class="wv"></div><div class="wv"></div>
+      <div class="wv"></div>
+    </div>
+
+    <button class="done-toggle" id="doneBtn" onclick="toggleDone()">✅ کام ہو گیا</button>
+  </div>
+</div>
+
+<!-- Keyboard Modal -->
+<div class="kb-modal" id="kbModal">
+  <div class="kb-box">
+    <div class="kb-title" id="kbTitle">یادداشت لکھیں</div>
+    <textarea class="kb-textarea" id="kbText" placeholder="یہاں لکھیں..."></textarea>
+    <div class="rem-row">
+      <span class="rem-label">⏰ یاددہانی:</span>
+      <input type="time" class="rem-input" id="remTime">
+      <span class="rem-label" style="font-size:11px">وقت</span>
+    </div>
+    <div class="kb-row">
+      <button class="kb-save" onclick="kbSave()">✅ محفوظ کریں</button>
+      <button class="kb-cancel" onclick="kbClose()">بند</button>
+    </div>
+  </div>
+</div>
+
+<!-- Home Keyboard Modal -->
+<div class="kb-modal" id="homeKbModal">
+  <div class="kb-box">
+    <div class="kb-title">کچھ بھی پوچھیں</div>
+    <textarea class="kb-textarea" id="homeKbText" placeholder="یہاں اپنا سوال لکھیں..."></textarea>
+    <div class="kb-row">
+      <button class="kb-save" onclick="homeKbSend()">📤 بھیجیں</button>
+      <button class="kb-cancel" onclick="homeKbClose()">بند</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm delete overlay -->
+<div class="conf-ov" id="confOv">
+  <div class="conf-box">
+    <div class="conf-title" id="confTitle">یادداشت مٹائیں؟</div>
+    <div class="conf-sub">کیا واقعی مٹانا چاہتے ہیں؟</div>
+    <div class="conf-btns">
+      <button class="cbtn yes" onclick="confirmDelete()">🗑 ہاں</button>
+      <button class="cbtn no" onclick="closeConf()">نہیں</button>
+    </div>
+  </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════
-// LANGUAGE
-// ═══════════════════════════════════════════
-let lang = 'ur';
+const GEMINI_KEY = 'AIzaSyAQ.Ab8RN6KFn6rdPWk0kmLA55SMgR1hnsv-hv8pYFnRBjGmZnRPnw';
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`;
 
-const T = {
-  ur: {
-    title: 'موسم کا حال',
-    subtitle: 'آپ کے موبائل اور آج کے موسم کا خاص پیغام',
-    btnText: 'موسم کا حال دیکھیں',
-    loading: 'موسم معلوم کر رہے ہیں...',
-    error: '❌ موسم معلوم نہیں ہو سکا۔ دوبارہ کوشش کریں۔',
-    errorGps: '❌ GPS کی اجازت دیں اور دوبارہ کوشش کریں۔',
-    dateLbl: '📅 تاریخ',
-    locLbl: '📍 مقام',
-    msgLbl: '✍️ آج کا پیغام',
-    badge: '🔮 آپ کا خاص پیغام',
-    refresh: 'دوبارہ دیکھیں',
-    footer: 'Open-Meteo API · GPS مقام',
-  },
-  en: {
-    title: 'Weather Today',
-    subtitle: 'A unique message for your device & today\'s weather',
-    btnText: '🌤️ Check Weather',
-    loading: 'Fetching your weather...',
-    error: '❌ Could not get weather. Please try again.',
-    errorGps: '❌ Please allow GPS access and try again.',
-    dateLbl: '📅 Date',
-    locLbl: '📍 Location',
-    msgLbl: '✍️ Today\'s Message',
-    badge: '🔮 Your Unique Message',
-    refresh: '🔄 Check Again',
-    footer: 'Open-Meteo API · GPS Location',
-  }
-};
+// ========== 25 MEMORIES ==========
+const MEM=[
+  {id:1,n:'گاڑی کی چابی'},{id:2,n:'گھر کی چابی'},{id:3,n:'بٹوا'},
+  {id:4,n:'اہم فائل'},{id:5,n:'موبائل چارجر'},{id:6,n:'کوئی چیز رکھنی ہے'},
+  {id:7,n:'کسی کو چیز دینی ہے'},{id:8,n:'دوست کی سالگرہ'},{id:9,n:'رشتہ دار کی سالگرہ'},
+  {id:10,n:'شادی کی سالگرہ'},{id:11,n:'مبارک باد دینی ہے'},{id:12,n:'ملاقات کرنی ہے'},
+  {id:13,n:'فون کرنا ہے'},{id:14,n:'پیغام بھیجنا ہے'},{id:15,n:'چیز خریدنی ہے'},
+  {id:16,n:'رقم ادا کرنی ہے'},{id:17,n:'رقم وصول کرنی ہے'},{id:18,n:'دستاویز جمع کرانی ہے'},
+  {id:19,n:'کام کی آخری تاریخ'},{id:20,n:'ضروری کام'},{id:21,n:'صبح کی دوا'},
+  {id:22,n:'دوپہر کی دوا'},{id:23,n:'رات کی دوا'},{id:24,n:'ڈاکٹر کی اپائنٹمنٹ'},
+  {id:25,n:'کوئی بھی ذاتی یاددہانی'}
+];
 
-function setLang(l) {
-  lang = l;
-  document.documentElement.lang = l === 'ur' ? 'ur' : 'en';
-  document.documentElement.dir = l === 'ur' ? 'rtl' : 'ltr';
+let ST = JSON.parse(localStorage.getItem('ssm_v1') || '{}');
+let VC = localStorage.getItem('ssm_vc') || 'f';
+let currentId = null;
+let recObj = null;
+let recRunning = false;
+let homeRecObj = null;
+let homeRecRunning = false;
+let remTimers = {};
 
-  document.getElementById('btnUr').classList.toggle('active', l === 'ur');
-  document.getElementById('btnEn').classList.toggle('active', l === 'en');
+function saveST(){ localStorage.setItem('ssm_v1', JSON.stringify(ST)); }
 
-  const isEn = l === 'en';
-  const fontCls = isEn ? 'en' : '';
-
-  const els = {
-    appTitle: T[l].title,
-    appSubtitle: T[l].subtitle,
-    btnText: T[l].btnText,
-    loadingText: T[l].loading,
-    dateLbl: T[l].dateLbl,
-    locLbl: T[l].locLbl,
-    msgLbl: T[l].msgLbl,
-    deviceBadge: T[l].badge,
-    refreshText: T[l].refresh,
-    footer: T[l].footer,
-  };
-
-  for (const [id, txt] of Object.entries(els)) {
-    const el = document.getElementById(id);
-    if (el) {
-      el.textContent = txt;
-      el.className = el.className.replace(/\ben\b/g, '').trim() + (isEn ? ' en' : '');
-    }
-  }
-
-  document.getElementById('mainBtn').className = 'weather-btn' + (isEn ? ' en' : '');
-  document.getElementById('refreshBtn').className = 'refresh-btn' + (isEn ? ' en' : '');
-  document.getElementById('errorText').className = 'error-text' + (isEn ? ' en' : '');
-  document.getElementById('loading').querySelector('.loading-text').className = 'loading-text' + (isEn ? ' en' : '');
-}
-
-// ═══════════════════════════════════════════
-// STARS
-// ═══════════════════════════════════════════
-(function createStars() {
-  const c = document.getElementById('starsContainer');
-  for (let i = 0; i < 80; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    const size = Math.random() * 2 + 1;
-    s.style.cssText = `
-      left:${Math.random()*100}%;
-      top:${Math.random()*100}%;
-      width:${size}px;height:${size}px;
-      --d:${2+Math.random()*4}s;
-      animation-delay:${Math.random()*4}s;
-      opacity:${Math.random()*0.5+0.1}
-    `;
+// ========== STARS ==========
+(function(){
+  const c=document.getElementById('stars');
+  for(let i=0;i<60;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=(Math.random()*2+1).toFixed(1);
+    s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;--d:${(Math.random()*3+1.5).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s`;
     c.appendChild(s);
   }
 })();
 
-// ═══════════════════════════════════════════
-// DEVICE ID
-// ═══════════════════════════════════════════
-function getDeviceId() {
-  let id = localStorage.getItem('wx_device_id');
-  if (!id) {
-    id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-    localStorage.setItem('wx_device_id', id);
+// ========== VOICE ==========
+function setVoice(v){
+  VC=v; localStorage.setItem('ssm_vc',v);
+  document.getElementById('vF').classList.toggle('on',v==='f');
+  document.getElementById('vM').classList.toggle('on',v==='m');
+}
+setVoice(VC);
+
+// ========== PIPER TTS (Aegis Female Urdu) ==========
+let piperTTS = null;
+let piperLoading = false;
+let piperReady = false;
+let piperQueue = [];
+
+async function initPiper(){
+  if(piperReady || piperLoading) return;
+  piperLoading = true;
+  try {
+    // pipertts UMD build از CDN
+    const { PiperNativeTTS } = await import('https://cdn.jsdelivr.net/npm/pipertts@latest/dist/index.js');
+    piperTTS = await PiperNativeTTS.load({
+      model: 'hub:aegis-female-ur-pk-medium',
+      modelsDir: '/piper-models',
+    });
+    piperReady = true;
+    piperLoading = false;
+    const st = document.getElementById('piperStatus');
+    if(st) st.textContent = '✅ تیار ہے';
+    // queue میں جو جملے انتظار میں تھے وہ چلاؤ
+    while(piperQueue.length){
+      const {text, onDone} = piperQueue.shift();
+      await _piperSpeak(text, onDone);
+    }
+  } catch(e){
+    piperLoading = false;
+    console.warn('Piper load failed, fallback to browser TTS', e);
+    const st = document.getElementById('piperStatus');
+    if(st) st.textContent = '⚠️ browser آواز';
+    // fallback: browser TTS
+    piperReady = false;
+    piperTTS = null;
+    while(piperQueue.length){
+      const {text, onDone} = piperQueue.shift();
+      _browserSpeak(text, onDone);
+    }
   }
-  return id;
 }
 
-// ═══════════════════════════════════════════
-// MESSAGE PICKER
-// ═══════════════════════════════════════════
-const weatherMessages = {
-"minus15":["سر جی، آج -15 ڈگری ہے — گھر سے باہر قدم مت رکھیں، ہیٹر آن کریں اور گرم رہیں!","ارے سر، یہ تو جمادینے والی ٹھنڈ ہے — گرم سوپ پیئں اور کمبل میں بیٹھیں!","سر جی، آج پانی کے پائپ جم سکتے ہیں — پہلے سے چیک کر لیں!","سر، اتنی ٹھنڈ میں بچوں کو سکول بھیجنا مناسب نہیں — گھر پر رکھیں آج!","ارے سر صاحب، گاڑی اسٹارٹ کرنے سے پہلے تھوڑا گرم ہونے دیں — یخ موسم ہے!","سر جی، آج باہر کا کام کل پر چھوڑ دیں — اس ٹھنڈ میں نکلنا ٹھیک نہیں!","سر، گرم دستانے اور موٹا مفلر لازمی پہنیں — یہ موسم مذاق نہیں کر رہا!","ارے سر، چائے پر چائے پیتے رہیں آج — ہیٹر کے ساتھ چائے ضروری ہے!","سر جی، -15 میں باہر نکلنا ہو تو منہ بھی ڈھانپ کر نکلیں — ٹھنڈی ہوا نقصان کرتی ہے!","سر، آج آفس میں ہیٹر کا خاص انتظام کریں — سٹاف کو ٹھنڈ لگ جائے گی!","ارے سر صاحب، کھڑکیاں اچھی طرح بند کریں آج — ٹھنڈی ہوا اندر آ جاتی ہے!","سر جی، گرم کھانا کھائیں آج — ٹھنڈا کھانا اس موسم میں بالکل نہیں چلے گا!","سر، موبائل بھی ٹھنڈ میں جلدی بند ہو جاتا ہے — جیب میں رکھیں!","ارے سر، آج جوتوں کے اندر موٹے موزے ضرور پہنیں — پاؤں ٹھنڈے ہوں تو سارا جسم ٹھنڈا!","سر جی، اس ٹھنڈ میں بجلی بھی زیادہ جاتی ہے — جنریٹر یا UPS چیک کر لیں!","سر، گرم پانی سے ہاتھ دھوئیں آج — ٹھنڈے پانی سے ہاتھ سُن ہو جاتے ہیں!","ارے سر صاحب، آج میٹنگ گھر سے آن لائن کر لیں — باہر نکلنا ضروری نہیں!","سر جی، بچوں کو گرم جرابیں اور سویٹر پہنائیں — یہ ٹھنڈ بچوں کو جلدی لگتی ہے!","سر، ناشتے میں کچھ گرم ضرور لیں — خالی پیٹ اس ٹھنڈ میں نہ نکلیں!","ارے سر، گاڑی کی ونڈشیلڈ پر برف جم سکتی ہے — پہلے صاف کر کے چلائیں!","سر جی، آج لائٹنگ کا کام باہر نہیں — اندر بیٹھ کر کام کریں!","سر، ہاتھ پاؤں کو گرم رکھیں — سردی سے جوڑوں میں درد ہو سکتا ہے!","ارے سر صاحب، گرم کمبل نکال لیں — رات بہت ٹھنڈی ہوگی!","سر جی، آج سکول میں بچوں کے لیے گرم پانی کا انتظام کریں — ضرورت پڑے گی!","سر، چھوٹے بچوں اور بوڑھوں کا خاص خیال رکھیں — یہ ٹھنڈ ان کے لیے خطرناک ہے!","ارے سر، باہر جانا ہو تو جلدی واپس آئیں — اس ٹھنڈ میں زیادہ دیر باہر نہ رہیں!","سر جی، گھر کے دروازے اور کھڑکیاں رات کو اچھی طرح بند کریں!","سر، آج کی چائے میں ادرک ڈالیں — ٹھنڈ بھگانے کا بہترین طریقہ ہے!","ارے سر صاحب، سر پر ٹوپی لازمی پہنیں — سر ننگا رکھنا ٹھیک نہیں اس موسم میں!","سر جی، پالتو جانوروں کو بھی گرم جگہ پر رکھیں — ان کو بھی ٹھنڈ لگتی ہے!","سر، آج گرم شوربہ پیئں — یہ اندر سے گرم رکھتا ہے!","ارے سر، باہر کا پانی پینے سے گریز کریں — ٹھنڈا پانی گلے کو لگ سکتا ہے!","سر جی، آج سکول میں اسمبلی اندر کریں — باہر کھڑا کرنا ٹھیک نہیں!","سر، موٹی اون کی جرابیں پہنیں آج — پاؤں گرم تو سب گرم!","ارے سر صاحب، آج سویرے جلدی اٹھ کر ہیٹر آن کریں — ٹھنڈے کمرے میں بیٹھنا مشکل ہے!","سر جی، گرم لحاف میں بیٹھ کر کام کریں — جسم گرم رہے گا!","سر، آج لپ بام لگائیں — اس ٹھنڈ میں ہونٹ پھٹ جاتے ہیں!","ارے سر، سکول کے برآمدے میں بچوں کو زیادہ نہ کھڑا رکھیں — اندر لے جائیں!","سر جی، آج کا دن گھر میں آرام سے گزاریں — باہر کچھ نہیں بگڑے گا!","سر، یخ موسم میں ہمت رکھیں — گرم چائے اور اچھی صحبت سے سب ٹھیک رہتا ہے!"],
-"minus10":["سر جی، -10 ڈگری ہے — چائے کا پہلا کپ ابھی پیئں!","ارے سر، آج مفلر گھر میں مت چھوڑیں — باہر ٹھنڈ ہے!","سر، سکول جاتے وقت کوٹ لازمی پہنیں — سردی کو ہلکا مت لیں!","سر جی، بچوں کو گرم ناشتہ دے کر بھیجیں — خالی پیٹ ٹھنڈ لگتی ہے!","ارے سر صاحب، آج ہاتھوں کو گرم رکھیں — دستانے پہنیں!","سر، آج گرم سوپ پیئں دوپہر کو — بہت اچھا لگے گا!","سر جی، آج سکول میں چائے کا انتظام کریں — سٹاف کو چاہیے!","ارے سر، شام کو جلدی گھر آئیں — رات کو ٹھنڈ بڑھتی ہے!","سر، آج ادرک والی چائے پیئں — ٹھنڈ بھگانے کا نسخہ ہے!","سر جی، باہر کا کام صبح جلدی نمٹائیں — دوپہر کو بھی ٹھنڈ ہوگی!","ارے سر صاحب، بچوں کے کپڑے چیک کریں — پتلے کپڑے نہیں چلیں گے آج!","سر، آج لنچ گرم کھائیں — ٹھنڈا کھانا ٹھیک نہیں اس موسم میں!","سر جی، گرم قہوہ پیئں — الائچی اور دار چینی والا!","ارے سر، آج پیدل کم چلیں — ٹھنڈ میں جوڑ درد کرتے ہیں!","سر، آج کا دن گھر میں آرام سے گزاریں اگر چھٹی ہو!","سر جی، گرم پانی پیتے رہیں — جسم ہائیڈریٹ رہے گا!","ارے سر صاحب، آج سکول میں بچوں کو گرم جوش سے پڑھائیں!","سر، چائے کے ساتھ کچھ میٹھا بھی کھائیں — توانائی ملے گی!","سر جی، آج رات کو جلدی سو جائیں — ٹھنڈ میں نیند اچھی آتی ہے!","ارے سر، باہر جانا ہو تو جیکٹ اور سویٹر دونوں پہنیں!","سر، آج گھر والوں کے ساتھ مل کر چائے پیئں — اچھا وقت گزرے گا!","سر جی، اون کی جرابیں پہنیں آج — پاؤں گرم رہیں گے!","ارے سر صاحب، آج گرم حلوہ کھائیں — سردی میں مزہ آتا ہے!","سر، باہر نکلتے وقت سر پر ٹوپی ضرور لگائیں!","سر جی، آج سکول میں بچوں کے لیے گرم ماحول بنائیں!","ارے سر، چھوٹے بچوں کو گرم جگہ بیٹھائیں — ٹھنڈے فرش پر مت!","سر، آج کا کام پر سکون انداز میں کریں — ٹھنڈ میں جلدی نہیں!","سر جی، گرم کھچڑی کھائیں آج — بہترین کھانا ہے سردی میں!","ارے سر صاحب، آج گھر کی کھڑکیاں بند رکھیں — ٹھنڈ باہر رہے!","سر، آج وٹامن سی لیں — قوت مدافعت مضبوط رہے گی!","سر جی، آج سکول میں بچوں سے ہنس کر بات کریں — ٹھنڈ میں مسکراہٹ گرمی دیتی ہے!","ارے سر، شام کو گھر میں چائے کا دور چلائیں — گھر والوں کے ساتھ!","سر، آج گرم پانی سے نہائیں — ٹھنڈا پانی آج کے موسم میں نہیں چلے گا!","سر جی، باہر کام کرنے والوں کو گرم چائے دیں — احسان ہوگا!","ارے سر صاحب، آج کا دن سکون سے گزاریں — صحت ٹھیک رہے گی!","سر، اپنے گھٹنوں اور کمر کو گرم رکھیں — درد نہیں ہوگا!","سر جی، آج کچھ مزیدار پکائیں گھر میں — سردی میں اچھا کھانا ضروری ہے!","ارے سر، اپنے ساتھیوں کا حال پوچھیں — سردی میں سب کو پروا چاہیے!","سر، آج کا دن اچھا گزارے — ٹھنڈ ہو یا نہ ہو آپ کا مزاج گرم رہے!","سر جی، اپنا خیال رکھیں — آپ سب کے لیے ضروری ہیں!"],
-"minus5":["سر جی، -5 ڈگری ہے — چائے گرم گرم پیئں!","ارے سر، آج مفلر باندھ کر نکلیں!","سر، سکول میں بچوں کو گرم رکھیں!","سر جی، ادرک والی چائے آج کی ضرورت ہے!","ارے سر صاحب، کوٹ لازمی پہنیں!","سر، آج لنچ گرم کھائیں!","سر جی، بچوں کو گرم جیکٹ پہنائیں!","ارے سر، دستانے پہنیں آج!","سر، گھر کے دروازے بند رکھیں!","سر جی، شام کو جلدی گھر آئیں!","ارے سر صاحب، دوپہر میں گرم سوپ پیئں!","سر، قہوہ پیئں — الائچی والا!","سر جی، سٹاف کے لیے چائے کا انتظام کریں!","ارے سر، آج پیدل کم چلیں!","سر، رات کو جلدی سوئیں!","سر جی، دن بھر گرم پانی پیئں!","ارے سر صاحب، گھر والوں کے ساتھ وقت گزاریں!","سر، موٹی جرابیں پہنیں!","سر جی، گرم حلوہ کھائیں!","ارے سر، باہر جاتے وقت ٹوپی پہنیں!","سر، بچوں کو گرم جوش سے پڑھائیں!","سر جی، چھوٹے بچوں کا خیال رکھیں!","ارے سر صاحب، گرم پانی سے نہائیں!","سر، آج کا کام سکون سے کریں!","سر جی، گرم کھچڑی کھائیں!","ارے سر، شام کو چائے کے ساتھ بیٹھیں!","سر، وٹامن سی لینا نہ بھولیں!","سر جی، باہر والوں کو چائے دیں!","ارے سر صاحب، گھر میں اچھا کھانا پکائیں!","سر، کمر کو گرم رکھیں!","سر جی، بچوں سے ہنس کر بات کریں!","ارے سر، ٹھنڈ میں بھی مسکراتے رہیں!","سر، چائے گھر والوں کے ساتھ پیئں!","سر جی، ساتھیوں کا حال پوچھیں!","ارے سر صاحب، آج کا دن سکون سے گزاریں!","سر، گرم سویٹر پہنیں!","سر جی، چائے میں شہد ڈالیں!","ارے سر، باہر کا کام صبح جلدی نمٹائیں!","سر، آج کا دن اچھا گزارے!","سر جی، اپنا اور گھر والوں کا خیال رکھیں!"],
-"0":["سر جی، 0 ڈگری ہے — پاکستان میں یہ قیامت کا موسم ہے، چائے فوری پیئں!","ارے سر، آج تو کوٹ کے اوپر شال بھی اوڑھ لیں!","سر، 0 ڈگری پر باہر نکلنا لازمی ہو تو مفلر منہ تک باندھیں!","سر جی، آج سکول میں بچوں کو باہر مت بھیجیں — اندر رہیں!","ارے سر صاحب، آج ادرک لہسن والی چائے پیئں — ٹھنڈ بھاگے گی!","سر، آج لنچ گرم گرم کھائیں — ٹھنڈا کھانا بالکل نہیں!","سر جی، بچوں کو گرم جیکٹ اور اسکارف پہنا کر بھیجیں!","ارے سر، ہاتھوں پر دستانے ضرور پہنیں — ٹھنڈ لگ جاتی ہے!","سر، گھر کی کھڑکیاں اچھی طرح بند کریں آج!","سر جی، شام کو جلدی گھر آئیں — رات کو 0 سے بھی نیچے جا سکتا ہے!","ارے سر صاحب، دوپہر کو گرم یخنی پیئں — بہت فائدہ ہوگا!","سر، آج قہوہ پیئں — الائچی اور دار چینی والا!","سر جی، سٹاف کے لیے گرم چائے کا انتظام کریں — سب ٹھنڈ میں ہیں!","ارے سر، آج پیدل بالکل کم کریں — ٹھنڈ میں جوڑ تکلیف دیتے ہیں!","سر، رات کو جلدی سو جائیں — گرم لحاف میں!","سر جی، دن بھر گرم پانی پیتے رہیں!","ارے سر صاحب، گھر والوں کے ساتھ گرم بیٹھک میں بیٹھیں!","سر، موٹی اون کی جرابیں پہنیں — پاؤں گرم رہیں گے!","سر جی، آج گرم حلوہ کھائیں — سردیوں کی جان ہے!","ارے سر، باہر جاتے وقت سر پر ٹوپی لازمی لگائیں!","سر، بچوں کو گرم جوش سے پڑھائیں — ٹھنڈ میں حوصلہ بڑھائیں!","سر جی، چھوٹے بچوں کو گرم جگہ بیٹھائیں — ٹھنڈا فرش نہیں!","ارے سر صاحب، گرم پانی سے نہائیں — ٹھنڈا پانی آج نہیں چلے گا!","سر، آج کا کام سکون سے کریں — ٹھنڈ میں جلدبازی نہیں!","سر جی، گرم کھچڑی کھائیں آج — بہترین کھانا ہے سردی میں!","ارے سر، شام کو گھر میں چائے کا دور چلائیں!","سر، وٹامن سی لینا نہ بھولیں آج!","سر جی، باہر کام کرنے والوں کو گرم چائے اور جگہ دیں!","ارے سر صاحب، گھر میں کچھ گرم اور مزیدار پکائیں!","سر، اپنی کمر اور گھٹنوں کو گرم رکھیں!","سر جی، بچوں سے ہنس کر بات کریں — ٹھنڈ میں بھی!","ارے سر، 0 ڈگری میں بھی آپ کی مسکراہٹ گرمی دیتی ہے!","سر، گھر والوں کے ساتھ مل کر چائے پیئں — یادگار لمحہ ہوگا!","سر جی، ساتھیوں کا خیال رکھیں — سردی میں سب کو پروا چاہیے!","ارے سر صاحب، آج کا دن سکون سے گزاریں!","سر، موٹا گرم سویٹر پہنیں آج!","سر جی، چائے میں شہد ڈالیں — گلے کو بھی اچھا لگے گا!","ارے سر، باہر کا کام صبح جلدی نمٹائیں اور اندر آ جائیں!","سر، آج کا دن اچھا گزارے — ٹھنڈ ہو یا گرمی!","سر جی، اپنا خیال رکھیں — آپ سکول کے سب سے اہم انسان ہیں!"],
-"5":["سر جی، 5 ڈگری ہے — چائے گرم گرم پیئں!","ارے سر، آج کوٹ اور مفلر لازمی ہیں!","سر، باہر نکلنا ہو تو تیاری پوری کریں!","سر جی، آج سکول میں گرم ماحول رکھیں!","ارے سر صاحب، ادرک والی چائے پیئں!","سر، آج لنچ میں گرم دال کھائیں!","سر جی، بچوں کو گرم کپڑے پہنائیں!","ارے سر، دستانے پہنیں آج!","سر، گھر کے دروازے بند رکھیں!","سر جی، شام کو جلدی گھر آئیں!","ارے سر صاحب، گرم سوپ پیئں دوپہر کو!","سر، قہوہ پیئں — الائچی والا!","سر جی، سٹاف کے لیے چائے کا انتظام کریں!","ارے سر، پیدل کم چلیں!","سر، رات کو جلدی سوئیں!","سر جی، دن بھر گرم پانی پیئں!","ارے سر صاحب، گھر والوں کے ساتھ وقت گزاریں!","سر، موٹی جرابیں پہنیں!","سر جی، گرم حلوہ کھائیں!","ارے سر، سر پر ٹوپی لازمی!","سر، بچوں کو گرم جوش سے پڑھائیں!","سر جی، چھوٹے بچوں کا خیال رکھیں!","ارے سر صاحب، گرم پانی سے نہائیں!","سر، کام سکون سے کریں!","سر جی، گرم کھچڑی کھائیں!","ارے سر، شام کو چائے کے ساتھ بیٹھیں!","سر، وٹامن سی لیں آج!","سر جی، باہر والوں کو چائے دیں!","ارے سر صاحب، گھر میں اچھا کھانا پکائیں!","سر، کمر کو گرم رکھیں!","سر جی، بچوں سے ہنس کر بات کریں!","ارے سر، ٹھنڈ میں مسکراتے رہیں!","سر، چائے گھر والوں کے ساتھ پیئں!","سر جی، ساتھیوں کا حال پوچھیں!","ارے سر صاحب، دن سکون سے گزاریں!","سر، گرم سویٹر پہنیں!","سر جی، چائے میں شہد ڈالیں!","ارے سر، باہر کا کام صبح جلدی نمٹائیں!","سر، آج کا دن اچھا گزارے!","سر جی، اپنا خیال رکھیں ہمیشہ!"],
-"10":["سر جی، 10 ڈگری ہے — چائے کا کپ ابھی پیئں، ٹھنڈ ابھی باقی ہے!","ارے سر، آج بھی جیکٹ لازمی ہے — ہلکی ٹھنڈ ہے باہر!","سر، مفلر ساتھ رکھیں — صبح شام ٹھنڈ لگتی ہے!","سر جی، آج بچوں کو سویٹر پہنا کر بھیجیں!","ارے سر صاحب، صبح کی چائے میں ادرک ڈالیں — اچھا لگے گا!","سر، آج لنچ گرم کھائیں — ٹھنڈا کھانا ابھی ٹھیک نہیں!","سر جی، آج سکول میں ہیٹر کی ضرورت ہے ابھی!","ارے سر، شام کو جیکٹ ضرور پہنیں — ٹھنڈ بڑھتی ہے!","سر، آج پانی گرم پیئں — ٹھنڈا پانی ابھی نہیں!","سر جی، آج بچوں کی اسمبلی مختصر کریں — ٹھنڈ ہے!","ارے سر صاحب، دوپہر کو قہوہ پیئں — الائچی والا!","سر، آج شام کو جلدی گھر آئیں — ٹھنڈ بڑھے گی!","سر جی، آج سکول میں بچوں کو گرم جوش سے پڑھائیں!","ارے سر، چائے میں شہد ڈالیں — گلا ٹھیک رہے گا!","سر، آج جرابیں پہنیں — پاؤں ٹھنڈے ہوتے ہیں!","سر جی، آج گرم کھچڑی کھائیں — سردی کے آخری دنوں کا مزہ!","ارے سر صاحب، آج پانی پیتے رہیں دن بھر!","سر، صبح کا ناشتہ گرم کریں — خالی پیٹ مت نکلیں!","سر جی، آج سکول میں سٹاف کو چائے پلائیں!","ارے سر، کھڑکیاں صبح کو بند رکھیں — دوپہر کو کھولیں!","سر، آج گھر والوں کے ساتھ چائے پیئں شام کو!","سر جی، آج وٹامن سی لینا نہ بھولیں!","ارے سر صاحب، آج گرم پانی سے نہائیں — ٹھنڈا پانی ابھی نہیں!","سر، آج سکون سے کام کریں — موسم اچھا ہو رہا ہے!","سر جی، آج بچوں سے ہنس کر بات کریں!","ارے سر، آج کا دن اچھا ہے — پرسکون موسم!","سر، گرم سویٹر ابھی کام آئے گا — پہنیں!","سر جی، آج لنچ کے بعد تھوڑا آرام کریں!","ارے سر صاحب، آج کے موسم میں چہل قدمی کریں دوپہر کو!","سر، آج بچوں کو باہر کھیلنے دیں دھوپ میں!","سر جی، آج گھر میں اچھا کھانا پکائیں!","ارے سر، ساتھیوں کا حال پوچھیں آج!","سر، آج کا دن سکون سے گزاریں!","سر جی، چائے کا ایک اور کپ پیئں — موسم کا تقاضا ہے!","ارے سر صاحب، آج بچوں کو اچھے سے پڑھائیں!","سر، آج شام کو گھر والوں کے ساتھ وقت گزاریں!","سر جی، آج کچھ مزیدار پکائیں — موسم اچھا ہے!","ارے سر، آج کا دن پر سکون ہے — لطف اٹھائیں!","سر، اپنا خیال رکھیں — چائے پیتے رہیں!","سر جی، آپ بہترین ہیں — اپنا خیال رکھیں!"],
-"15":["سر جی، 15 ڈگری ہے — بہترین موسم! چائے پیئں اور باہر نکلیں!","ارے سر، آج موسم بہت خوشگوار ہے — لطف اٹھائیں!","سر، آج ہلکی جیکٹ کافی ہے — نکلیں باہر!","سر جی، آج سکول میں بچوں کو باہر کھیلنے دیں!","ارے سر صاحب، آج چائے کے ساتھ بسکٹ کھائیں!","سر، آج لنچ باہر کھائیں — موسم اچھا ہے!","سر جی، بچوں کو ہلکا سویٹر کافی ہے آج!","ارے سر، آج باہر چہل قدمی ضرور کریں!","سر، آج پانی کافی پیئں — موسم میں ضرورت ہے!","سر جی، آج بچوں کو باہر کھیلنے دیں!","ارے سر صاحب، دوپہر کو چائے پیئں!","سر، آج شام کو گھر جلدی آئیں!","سر جی، آج سکول میں اچھا ماحول بنائیں!","ارے سر، آج کا موسم سکول کے لیے بہترین ہے!","سر، آج ہلکے کپڑے پہنیں — موسم خوشگوار ہے!","سر جی، آج گھر میں اچھا کھانا پکائیں!","ارے سر صاحب، آج پانی پیتے رہیں!","سر، صبح کا ناشتہ ضرور کریں!","سر جی، آج سٹاف کو چائے یا ٹھنڈا پانی پلائیں!","ارے سر، آج کا موسم سب سے اچھا ہے!","سر، آج گھر والوں کے ساتھ شام گزاریں!","سر جی، آج وٹامن سی لیں!","ارے سر صاحب، آج باہر نکلیں — موسم لاجواب ہے!","سر، آج سکون سے کام کریں — موسم ساتھ دے رہا ہے!","سر جی، آج بچوں سے ہنس کر بات کریں!","ارے سر، آج کا دن بہترین ہے!","سر، آج کے موسم میں چہل قدمی ضرور کریں!","سر جی، آج لنچ کے بعد تھوڑا آرام کریں!","ارے سر صاحب، آج باہر دھوپ میں بیٹھیں!","سر، آج بچوں کو باہر کھیلنے دیں!","سر جی، آج گھر میں کچھ مزیدار پکائیں!","ارے سر، ساتھیوں کا حال پوچھیں!","سر، آج کا دن سکون سے گزاریں!","سر جی، چائے کا ایک کپ پیئں!","ارے سر صاحب، آج بچوں کو اچھے سے پڑھائیں!","سر، آج شام کو گھر والوں کے ساتھ وقت گزاریں!","سر جی، آج کا دن پر سکون ہے!","ارے سر، اپنا خیال رکھیں!","سر، آج کا دن اچھا گزارے!","سر جی، آپ بہترین ہیں!"],
-"20":["سر جی، 20 ڈگری ہے — بالکل خوشگوار موسم! پانی پیئں اور انجوائے کریں!","ارے سر، آج موسم بہترین ہے — باہر ضرور نکلیں!","سر، آج ہلکے کپڑے پہنیں — نہ گرمی نہ ٹھنڈ!","سر جی، آج سکول میں بچوں کو باہر کھیلنے دیں — موسم لاجواب ہے!","ارے سر صاحب، آج پانی کافی پیئں — جسم کو ضرورت ہے!","سر، آج لنچ باہر کھائیں — موسم بہت اچھا ہے!","سر جی، بچوں کو ہلکے کپڑے پہنائیں آج!","ارے سر، آج باہر چہل قدمی ضرور کریں — موسم کا مزہ لیں!","سر، آج پانی کافی پیئں — موسم میں بھی ضرورت ہوتی ہے!","سر جی، آج بچوں کو باہر کھیلنے دیں — یاد رہے گا!","ارے سر صاحب، دوپہر کو ٹھنڈا پانی پیئں!","سر، آج شام کو گھر جلدی آئیں — موسم اچھا ہے!","سر جی، آج سکول میں اچھا ماحول بنائیں!","ارے سر، آج کا موسم 20 ڈگری — بالکل سونے پر سہاگہ!","سر، آج ہلکے کپڑے پہنیں — موسم خوشگوار ہے!","سر جی، آج گھر میں اچھا کھانا پکائیں!","ارے سر صاحب، آج پانی پیتے رہیں!","سر، صبح کا ناشتہ ضرور کریں!","سر جی، آج سٹاف کو چائے یا ٹھنڈا پانی پلائیں!","ارے سر، آج کا موسم سب سے خوشگوار ہے!","سر، آج گھر والوں کے ساتھ شام گزاریں!","سر جی، آج وٹامن سی لیں!","ارے سر صاحب، آج باہر نکلیں — موسم لاجواب ہے!","سر، آج سکون سے کام کریں — موسم ساتھ دے رہا ہے!","سر جی، آج بچوں سے ہنس کر بات کریں!","ارے سر، آج کا دن بہترین ہے!","سر، آج کے موسم میں چہل قدمی ضرور کریں!","سر جی، آج لنچ کے بعد تھوڑا آرام کریں!","ارے سر صاحب، آج باہر دھوپ میں بیٹھیں!","سر، آج بچوں کو باہر کھیلنے دیں!","سر جی، آج گھر میں کچھ مزیدار پکائیں!","ارے سر، ساتھیوں کا حال پوچھیں!","سر، آج کا دن سکون سے گزاریں!","سر جی، پانی کا ایک گلاس پیئں ابھی!","ارے سر صاحب، آج بچوں کو اچھے سے پڑھائیں!","سر، آج شام کو گھر والوں کے ساتھ وقت گزاریں!","سر جی، آج کا دن پر سکون ہے!","ارے سر، اپنا خیال رکھیں!","سر، آج کا دن اچھا گزارے!","سر جی، آپ بہترین ہیں!"],
-"25":["سر جی، 25 ڈگری ہے — گرمی آ گئی! پانی پیتے رہیں!","ارے سر، آج پانی زیادہ پیئں — گرمی کا موسم شروع!","سر، آج ہلکے سوتی کپڑے پہنیں!","سر جی، آج سکول میں پنکھوں اور پانی کا انتظام کریں!","ارے سر صاحب، آج پانی زیادہ پیئں!","سر، آج لنچ ہلکا کھائیں — گرمی میں بھاری کھانا ٹھیک نہیں!","سر جی، بچوں کو سوتی ہلکے کپڑے پہنائیں!","ارے سر، آج صبح چہل قدمی کریں — دوپہر کو گھر میں رہیں!","سر، آج پانی کافی پیئں — گرمی میں ضرورت ہے!","سر جی، آج بچوں کو دوپہر کو اندر رکھیں!","ارے سر صاحب، دوپہر کو ٹھنڈا پانی پیئں!","سر، آج شام کو گھر جلدی آئیں!","سر جی، آج سکول میں پنکھے چیک کریں!","ارے سر، آج کا موسم گرم ہے — پانی پیئں!","سر، آج ہلکے کپڑے پہنیں — سوتی کپڑے بہترین ہیں!","سر جی، آج گھر میں ہلکا کھانا پکائیں!","ارے سر صاحب، آج پانی پیتے رہیں!","سر، صبح کا ناشتہ ضرور کریں!","سر جی، آج سٹاف کو ٹھنڈا پانی پلائیں!","ارے سر، آج کا موسم گرم ہے!","سر، آج گھر والوں کے ساتھ شام گزاریں!","سر جی، آج وٹامن سی لیں!","ارے سر صاحب، آج صبح باہر نکلیں — دوپہر کو نہیں!","سر، آج سکون سے کام کریں!","سر جی، آج بچوں سے ہنس کر بات کریں!","ارے سر، آج کا دن گرم ہے — خیال رکھیں!","سر، آج صبح کے موسم میں چہل قدمی کریں!","سر جی، آج لنچ کے بعد آرام کریں!","ارے سر صاحب، آج پانی پیتے رہیں!","سر، آج بچوں کو صبح باہر کھیلنے دیں!","سر جی، آج گھر میں ٹھنڈا کھانا کھائیں!","ارے سر، ساتھیوں کا حال پوچھیں!","سر، آج کا دن سکون سے گزاریں!","سر جی، پانی کا ایک گلاس پیئں ابھی!","ارے سر صاحب، آج بچوں کو اچھے سے پڑھائیں!","سر، آج شام کو گھر والوں کے ساتھ وقت گزاریں!","سر جی، آج کا دن پر سکون ہے!","ارے سر، اپنا خیال رکھیں!","سر، آج کا دن اچھا گزارے!","سر جی، آپ بہترین ہیں!"],
-"35":["سر جی، آج گرمی نے کمر کس لی ہے — پانی پیتے رہیں!","ارے سر، باہر نکلنا ہو تو ٹوپی لازمی ہے آج!","سر، دوپہر کو گھر میں رہیں — باہر کا کام صبح نمٹائیں!","سر جی، آج لسی پیئں — گرمی میں بہترین ساتھی ہے!","ارے سر صاحب، سوتی کپڑے پہنیں آج — گرمی کم لگے گی!","سر، بچوں کو دوپہر کو باہر نہ جانے دیں — اندر رکھیں!","سر جی، آج تربوز کھائیں — قدرتی ٹھنڈک ہے!","ارے سر، گاڑی میں بیٹھنے سے پہلے شیشے کھول دیں — اندر بھٹی ہوتی ہے!","سر، آج پھل زیادہ کھائیں — کھیرا، خربوزہ بہترین ہے!","سر جی، باہر کام ہو تو سایہ ڈھونڈیں — دھوپ میں کھڑے مت رہیں!","ارے سر صاحب، آج چائے کم کریں — ٹھنڈے مشروبات زیادہ!","سر، چکر آئیں یا کمزوری لگے تو فوراً ٹھنڈی جگہ بیٹھ جائیں!","سر جی، سکول میں بچوں کو پانی پینے کی یاد دلاتے رہیں!","ارے سر، گھر والوں کو بھی پانی پینے کی یاد دلائیں!","سر، آج ہلکے پھلکے کام کریں — باہر زیادہ محنت مت کریں!","سر جی، دوپہر کو تھوڑا آرام کریں — جسم کو سکون دیں!","ارے سر صاحب، ٹھنڈے پانی سے منہ دھوتے رہیں — تازگی ملے گی!","سر، کھانے میں دہی ضرور لیں — پیٹ ٹھنڈا رہتا ہے!","سر جی، بازار کا کام صبح 9 بجے سے پہلے نمٹا لیں!","ارے سر، چھوٹے بچوں کو گرمی میں زیادہ نہ گھمائیں!","سر، آج ہلکا پھلکا ناشتہ کریں — بھاری ناشتہ گرمی میں سستی لاتا ہے!","سر جی، شام کو باہر نکلیں — صبح اور شام کا موسم بہتر ہوتا ہے!","ارے سر صاحب، گھر کے بزرگوں کا خاص خیال رکھیں آج!","سر، پانی کی بوتل گاڑی میں بھی رکھیں — باہر نکلتے وقت یاد رہے!","سر جی، کھانا تازہ کھائیں — گرمی میں کھانا جلدی خراب ہوتا ہے!","ارے سر، آج شکنجبین پیئں — گرمی کا پرانا علاج ہے!","سر، گھر کی کھڑکیاں صبح کھولیں اور دوپہر سے پہلے بند کر لیں!","سر جی، پیدل سفر کم کریں — گرمی میں تھکاوٹ جلدی ہوتی ہے!","ارے سر صاحب، آج روح افزا پیئں — پرانا نسخہ ہے گرمی کا!","سر، سکول میں پانی کے گھڑے بھرے رہیں — بچوں کو پیاسا نہ رہنے دیں!","سر جی، آج کا دن سکون سے گزاریں — جلدبازی میں گرمی اور لگتی ہے!","ارے سر، باہر کام کرنے والوں کو ٹھنڈا پانی دیں — ان کا حق ہے!","سر، آج دن میں دو بار نہائیں — ٹھنڈک ملے گی!","سر جی، پسینہ آئے تو نمکین پانی پیئں — کمزوری نہیں آئے گی!","ارے سر صاحب، گھر کی چھت پر مت جائیں دوپہر کو — تپتی چھت خطرناک ہے!","سر، آج اپنا بھی خیال رکھیں — دوسروں کی فکر کرتے کرتے خود کو مت بھولیں!","سر جی، پیٹھ اور گردن پر گیلا کپڑا رکھیں — گرمی کم لگے گی!","ارے سر، آج پھلوں کا رس پیئں — بازار کا نہیں، گھر کا تازہ!","سر، بچوں کو ٹھنڈے کمرے میں پڑھائیں — گرمی میں دھیان نہیں لگتا!","سر جی، اپنا خیال رکھیں — آپ ٹھیک تو سب ٹھیک!"],
-"45":["سر جی، آج گرمی نہیں ابتلا ہے — گھر سے باہر قدم مت رکھیں!","ارے سر، باہر نکلنا ہے تو جان کا خطرہ ہے — ہر قدم سوچ کر اٹھائیں!","سر، پانی، سایہ اور آرام — یہ تین چیزیں آج کا ایجنڈا ہیں!","سر جی، سکول میں بچوں کو باہر نکالنا بالکل منع — یہ حکم ہے!","ارے سر صاحب، پانی ہاتھ سے مت چھوڑیں — ہر 10 منٹ میں پیئں، کوئی وقفہ نہیں!","سر، ننگے سر باہر نکلنا — یہ لو کو کھلی دعوت ہے!","سر جی، سفید اور سوتی کپڑے پہنیں — باقی سب آج کے لیے بند!","ارے سر، گھر کی کھڑکیاں اور دروازے موٹے پردوں سے بند رکھیں!","سر، بچوں کو باہر کھیلنے کی اجازت — یہ ممکن نہیں آج!","سر جی، بند گاڑی اندر 80 ڈگری سے بھی زیادہ گرم ہو سکتی ہے!","ارے سر صاحب، کھانا بالکل ہلکا — دہی، کھیرا، پھل — باقی کچھ نہیں!","سر، گرمی کی چپیٹ ایک لمحے میں آتی ہے — ہوشیار رہیں!","سر جی، باہر کا کوئی کام نہیں — ہر کام اندر کریں!","ارے سر، گھر کے بزرگوں کو ایک لمحے کے لیے بھی اکیلا مت چھوڑیں!","سر، آفس میں AC ضرور چلائیں!","سر جی، باہر کام کرنے والوں کو ہر 15 منٹ میں سایہ اور پانی دیں!","ارے سر صاحب، سکول میں ہر کلاس میں ٹھنڈا پانی رکھیں!","سر، گھر والوں کو ہر 20 منٹ میں پانی یاد دلائیں!","سر جی، آج چار پانچ بار ٹھنڈے پانی سے غسل کریں!","ارے سر، چھت پر دوپہر کو جانا — سختی سے منع، آگ ہے وہاں!","سر، پھلوں کا تازہ رس پیئں — جسم کو قدرتی ٹھنڈک دیں!","سر جی، چائے اور کافی آج کے لیے بند!","ارے سر صاحب، بند گاڑی میں بیٹھنا — AC لازمی چلائیں، کوئی سمجھوتہ نہیں!","سر، گھر میں لسی اور شکنجبین ہر وقت موجود رکھیں!","سر جی، ڈاکٹر کا نمبر موبائل میں سب سے اوپر رکھیں!","ارے سر، گھر کی چھت اور دیواروں پر شام کو پانی چھڑکیں!","سر، پیدل سفر بالکل نہیں — یہ خودکشی کے برابر ہے!","سر جی، آج کا دن گھر کے اندر گزاریں!","ارے سر صاحب، گھر میں بجلی گئی تو فوراً پانی پیئں اور ٹھنڈی جگہ ڈھونڈیں!","سر، بچوں کو ہر 10 منٹ میں پانی پلائیں!","سر جی، آج کا دن آہستہ گزاریں — بھاگ دوڑ جان کو خطرے میں ڈالتی ہے!","ارے سر، گھر کے سارے پنکھے اور AC چیک کریں!","سر، باہر نکلنا ہو تو چھتری اور پانی — لازمی!","سر جی، آج گرمی کو ہرگز ہلکا مت لیں!","ارے سر صاحب، پانی پیئں، اندر رہیں اور محفوظ رہیں!","سر، آج کا دن اچھا گزارے — اللہ آپ کو محفوظ رکھے!","سر جی، آپ بہترین ہیں — گرمی میں بھی ہمت رکھیں!","ارے سر، اپنا اور گھر والوں کا خیال رکھیں!","سر، گرمی میں بھی مسکراتے رہیں!","سر جی، آج کا دن محفوظ گزارے!"],
-"55":["سر جی، آج موسم نہیں آگ ہے! خدا کے لیے گھر سے باہر قدم مت رکھیں، ابھی اندر جائیں — پانی پیئں، AC آن کریں، جان ہے تو جہان ہے!","ارے سر، باہر نکلنا ہے تو اللہ سے مدد مانگیں، پانی اور چھتری ہاتھ میں لیں اور جلدی واپس آئیں — یہ مذاق نہیں!","سر، آج درجہ حرارت انسانی برداشت سے باہر ہے — گھر میں رہیں اور پانی پیتے رہیں!","سر جی، سکول کی چھت بھی تپتی ہے آج — بچوں کو باہر نکالنا بالکل منع، یہ ان کی زندگی کا معاملہ ہے!","ارے سر صاحب، پانی ہاتھ سے مت چھوڑیں — ہر 10 منٹ میں پیئں، گھڑی دیکھ کر، کوئی وقفہ نہیں!","سر، ننگے سر باہر نکلنا — یہ لو کو کھلی دعوت ہے، ٹوپی اور چھتری لازمی!","سر جی، سفید اور سوتی کپڑے — گہرے رنگ کے کپڑے گرمی کو چمگادڑ کی طرح چمٹاتے ہیں!","ارے سر، گھر کی کھڑکیاں اور دروازے موٹے پردوں سے بند رکھیں — باہر آگ کا دریا ہے!","سر، بچوں کو باہر کھیلنے کی اجازت دینا — یہ ماں باپ کی سب سے بڑی غلطی ہوگی!","سر جی، بند گاڑی اندر 90 ڈگری سے بھی زیادہ گرم ہو سکتی ہے — بچوں کو ہرگز اندر نہ چھوڑیں!","ارے سر صاحب، کھانا بالکل ہلکا — دہی، کھیرا، پھل — بھاری کھانا آج کے لیے بالکل بند!","سر، کمزوری محسوس ہو تو فوراً لیٹ جائیں اور پانی پیئں — پل بھر کی دیر نہیں!","سر جی، باہر کا کوئی کام نہیں — ہر کام گھر کے اندر، باہر کچھ نہیں!","ارے سر، گھر کے بزرگوں کو ایک لمحے کے لیے بھی اکیلا مت چھوڑیں — یہ ان کی زندگی کا معاملہ ہے!","سر، آفس میں AC ضرور چلائیں — بغیر AC کے بیٹھنا یہاں ممکن نہیں!","سر جی، باہر کام کرنے والوں کو ہر 10 منٹ میں سایہ اور پانی دیں — یہ ان کی زندگی کا معاملہ ہے!","ارے سر صاحب، یہ ہنگامی صورتحال ہے — گرمی کو بالکل ہلکا مت لیں!","سر، سکول میں ہر کلاس میں ٹھنڈا پانی لازمی رکھیں!","سر جی، گھر والوں کو ہر 10 منٹ میں پانی یاد دلائیں — یہ ضروری ہے!","ارے سر، آج آٹھ دس بار ٹھنڈے پانی سے غسل کریں — جسم کو ریفریش رکھیں!","سر، چھت پر دوپہر کو جانا — سختی سے منع، آگ ہے وہاں!","سر جی، پھلوں کا تازہ رس پیئں — جسم کو قدرتی ٹھنڈک دیں!","ارے سر صاحب، چائے اور کافی آج کے لیے بالکل بند — صرف ٹھنڈے مشروبات اور پانی!","سر، بند گاڑی میں بیٹھنا — AC لازمی چلائیں، کوئی سمجھوتہ نہیں!","سر جی، گھر میں لسی اور شکنجبین — یہ دو چیزیں ہر وقت موجود رکھیں!","ارے سر، ڈاکٹر کا نمبر موبائل میں سب سے اوپر رکھیں — ضرورت پڑ سکتی ہے!","سر، شام کو چھت اور دیواروں پر پانی چھڑکیں — رات آرام سے گزرے گی!","سر جی، پیدل سفر بالکل نہیں — یہ خودکشی کے برابر ہے!","ارے سر صاحب، آج کا دن گھر کے اندر گزاریں — باہر نکلنے کی وجہ نہ ہو تو مت نکلیں!","سر، گھر میں بجلی گئی تو فوراً پانی پیئں اور ٹھنڈی جگہ ڈھونڈیں — یہ ہنگامی صورتحال ہے!","سر جی، بچوں کو ہر 10 منٹ میں پانی پلائیں — پیاس لگنے کا انتظار مت کریں!","ارے سر، آج کا دن آہستہ گزاریں — بھاگ دوڑ جان کو خطرے میں ڈالتی ہے!","سر، گھر کے سارے پنکھے اور AC چیک کریں — گرمی میں خرابی بڑی مصیبت ہے!","سر جی، باہر نکلنا ہو تو چھتری اور پانی — لازمی، کوئی کمی نہیں!","ارے سر صاحب، گرمی کو ہرگز ہلکا مت لیں — یہ جان کا معاملہ ہے!","سر، آج کا دن بہت احتیاط سے گزاریں — اپنا اور گھر والوں کا خیال رکھیں!","سر جی، پانی پیئں، اندر رہیں اور محفوظ رہیں — یہ تین کام آج سب سے اہم ہیں!","ارے سر، آج کا دن اچھا گزارے — اللہ آپ کو اور آپ کے گھر والوں کو محفوظ رکھے!","سر، آپ بہترین ہیں — گرمی میں بھی ہمت رکھیں اور اپنا خیال رکھیں!","سر جی، جان ہے تو جہان ہے — آج گھر میں رہیں اور سب کو محفوظ رکھیں!"]
-};
-
-function getTempKey(temp) {
-  if (temp <= -13) return 'minus15';
-  if (temp <= -8) return 'minus10';
-  if (temp <= -3) return 'minus5';
-  if (temp <= 2) return '0';
-  if (temp <= 7) return '5';
-  if (temp <= 12) return '10';
-  if (temp <= 17) return '15';
-  if (temp <= 22) return '20';
-  if (temp <= 27) return '25';
-  if (temp <= 32) return '35'; // placeholder
-  if (temp <= 37) return '35';
-  if (temp <= 47) return '45';
-  return '55';
-}
-
-function getTempIcon(temp) {
-  if (temp <= 0) return '🥶';
-  if (temp <= 10) return '❄️';
-  if (temp <= 18) return '🌨️';
-  if (temp <= 23) return '🌤️';
-  if (temp <= 28) return '☀️';
-  if (temp <= 35) return '🌞';
-  if (temp <= 42) return '🔥';
-  return '🔥🔥';
-}
-
-function getMessage(temp, deviceId) {
-  const key = getTempKey(temp);
-  const pool = weatherMessages[key];
-  // Seed: device id + today date
-  const today = new Date().toISOString().slice(0,10);
-  const seed = deviceId + today + temp;
-  let hash = 0;
-  for (let i = 0; i < seed.length; i++) {
-    hash = ((hash << 5) - hash) + seed.charCodeAt(i);
-    hash |= 0;
+async function _piperSpeak(text, onDone){
+  try {
+    const { audio } = await piperTTS.synthesize(text);
+    const blob = new Blob([audio], { type: 'audio/wav' });
+    const url = URL.createObjectURL(blob);
+    const a = new Audio(url);
+    document.getElementById('aiWaves').classList.add('show');
+    a.onended = () => {
+      URL.revokeObjectURL(url);
+      document.getElementById('aiWaves').classList.remove('show');
+      if(onDone) onDone();
+    };
+    a.onerror = () => {
+      URL.revokeObjectURL(url);
+      document.getElementById('aiWaves').classList.remove('show');
+      if(onDone) onDone();
+    };
+    a.play();
+  } catch(e){
+    document.getElementById('aiWaves').classList.remove('show');
+    if(onDone) onDone();
   }
-  const idx = Math.abs(hash) % pool.length;
-  return pool[idx];
 }
 
-// ═══════════════════════════════════════════
-// DATE
-// ═══════════════════════════════════════════
-const UD = ['اتوار','پیر','منگل','بدھ','جمعرات','جمعہ','ہفتہ'];
-const UM = ['جنوری','فروری','مارچ','اپریل','مئی','جون','جولائی','اگست','ستمبر','اکتوبر','نومبر','دسمبر'];
+function _browserSpeak(text, onDone){
+  if(!window.speechSynthesis){if(onDone)onDone();return;}
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ur-PK';
+  u.rate = 0.80; u.pitch = 1.2; u.volume = 0.9;
+  u.onend = ()=>{ document.getElementById('aiWaves').classList.remove('show'); if(onDone)onDone(); };
+  u.onerror = ()=>{ document.getElementById('aiWaves').classList.remove('show'); if(onDone)onDone(); };
+  document.getElementById('aiWaves').classList.add('show');
+  speechSynthesis.speak(u);
+}
 
-function getDateString() {
-  const d = new Date();
-  if (lang === 'en') {
-    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+function speak(text, onDone){
+  if(piperReady && piperTTS){
+    _piperSpeak(text, onDone);
+  } else {
+    piperQueue.push({text, onDone});
+    if(!piperLoading) initPiper();
+    // فوری طور پر browser TTS سے بول دو
+    _browserSpeak(text, onDone);
   }
-  return `${UD[d.getDay()]}، ${d.getDate()} ${UM[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-// ═══════════════════════════════════════════
-// MAIN
-// ═══════════════════════════════════════════
-let fetching = false;
+function speakSimple(text){
+  speak(text, null);
+}
 
-function show(id) { document.getElementById(id).style.display = 'block'; }
-function hide(id) { document.getElementById(id).style.display = 'none'; }
+// صفحہ کھلتے ہی Piper خاموشی سے load شروع
+window.addEventListener('load', ()=>{ setTimeout(initPiper, 1000); });
 
-async function getWeather() {
-  if (fetching) return;
-  fetching = true;
+// ========== GEMINI API ==========
+async function askGemini(systemPrompt, userMsg){
+  const body = {
+    contents:[{role:'user', parts:[{text: systemPrompt + '\n\nصارف نے کہا: ' + userMsg}]}],
+    generationConfig:{temperature:0.9, maxOutputTokens:300}
+  };
+  const res = await fetch(GEMINI_URL, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+}
 
-  hide('resultCard');
-  hide('errorBox');
-  hide('refreshBtn');
-  document.getElementById('loading').style.display = 'block';
-  document.getElementById('loadingText').textContent = T[lang].loading;
+function getDetailSystemPrompt(memName, savedNote){
+  return `آپ "Smart School Memory" ایپ کے ذہین اور دوستانہ ساتھی ہیں۔ آپ اردو میں بات کرتے ہیں۔ 
+آپ ایک گرم جوش دوست کی طرح بات کریں — نہ بہت رسمی، نہ روبوٹ جیسا۔ مختصر اور دل سے جواب دیں۔
+یادداشت کا عنوان: "${memName}"
+محفوظ نوٹ: "${savedNote || 'ابھی کچھ نہیں'}"
+کام:
+- اگر صارف کچھ یاد کروانا چاہے → محفوظ کر لو اور خوشی سے کہو
+- اگر پوچھے کہاں رکھا یا کیا تھا → محفوظ نوٹ سے بتاؤ
+- اگر کام ہو گیا بولے → شاباشی دو
+- اگر مٹانا چاہے → پوچھو یقین سے؟
+جواب صرف اردو میں، 1-2 جملے، دوستانہ انداز میں۔`;
+}
+
+function getHomeSystemPrompt(allNotes){
+  return `آپ "Smart School Memory" ایپ کے ذہین ساتھی ہیں۔ اردو میں دوستانہ انداز سے بات کریں۔
+موجودہ یادداشتیں:
+${allNotes}
+صارف کا سوال یا بات سنیں اور مددگار جواب دیں۔ مختصر اور انسانی انداز میں، 1-2 جملے۔`;
+}
+
+// ========== KEYBOARD MODAL (DETAIL) ==========
+function onMicKeyboard(){
+  const mem = MEM.find(m=>m.id===currentId);
+  document.getElementById('kbTitle').textContent = `"${mem.n}" — یادداشت لکھیں`;
+  document.getElementById('kbText').value = ST[currentId]?.note || '';
+  document.getElementById('remTime').value = ST[currentId]?.remTime || '';
+  document.getElementById('kbModal').classList.add('show');
+  setTimeout(()=>document.getElementById('kbText').focus(), 350);
+}
+
+function kbClose(){
+  document.getElementById('kbModal').classList.remove('show');
+}
+
+async function kbSave(){
+  const txt = document.getElementById('kbText').value.trim();
+  const remTime = document.getElementById('remTime').value;
+  kbClose();
+  if(!txt) return;
+  if(!ST[currentId]) ST[currentId]={note:'',done:false};
+  ST[currentId].note = txt;
+  if(remTime) ST[currentId].remTime = remTime;
+  saveST();
+  refreshDetail();
+  renderList();
+  if(remTime) scheduleReminder(currentId, remTime);
+  // Gemini response
+  document.getElementById('detailLoading').classList.add('show');
+  const mem = MEM.find(m=>m.id===currentId);
+  try{
+    const reply = await askGemini(getDetailSystemPrompt(mem.n, txt), txt + (remTime ? ` (یاددہانی: ${remTime})` : ''));
+    document.getElementById('detailLoading').classList.remove('show');
+    speak(reply);
+    document.getElementById('listenTxt').textContent = reply;
+    document.getElementById('listenTxt').className = 'listen-txt';
+  } catch(e){
+    document.getElementById('detailLoading').classList.remove('show');
+    speak('یاد رکھ لیا، بھائی!');
+  }
+}
+
+// ========== REMINDER ==========
+function scheduleReminder(id, timeStr){
+  if(remTimers[id]) clearTimeout(remTimers[id]);
+  const [h,m] = timeStr.split(':').map(Number);
+  const now = new Date();
+  const target = new Date();
+  target.setHours(h, m, 0, 0);
+  if(target <= now) target.setDate(target.getDate()+1);
+  const diff = target - now;
+  remTimers[id] = setTimeout(()=>{
+    const mem = MEM.find(x=>x.id===id);
+    const note = ST[id]?.note || '';
+    speakSimple(`یاددہانی: ${mem.n}${note ? ' — ' + note : ''}`);
+    if(Notification?.permission === 'granted'){
+      new Notification('Smart School Memory', {body: `${mem.n}: ${note}`, icon:'🎓'});
+    }
+  }, diff);
+}
+
+// Ask notification permission
+if(Notification && Notification.permission === 'default'){
+  Notification.requestPermission();
+}
+
+// Restore reminders on load
+Object.keys(ST).forEach(id=>{
+  if(ST[id]?.remTime) scheduleReminder(Number(id), ST[id].remTime);
+});
+
+// ========== SMALL MIC TOGGLE (DETAIL) ==========
+function onMicToggle(){
+  if(recRunning){
+    // STOP
+    recRunning = false;
+    if(recObj) try{recObj.stop();}catch(e){}
+    recObj = null;
+    document.getElementById('smallMic').classList.remove('listening');
+    document.getElementById('listenTxt').textContent = '';
+    document.getElementById('listenTxt').className = 'listen-txt';
+    setDetailStatus('تیار ہوں، حکم کریں!');
+  } else {
+    // START
+    if(!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) return;
+    recRunning = true;
+    const btn = document.getElementById('smallMic');
+    btn.classList.add('listening');
+    document.getElementById('listenTxt').textContent = '🔴 بولیں...';
+    document.getElementById('listenTxt').className = 'listen-txt red';
+    setDetailStatus('سن رہا ہوں...');
+
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recObj = new SR();
+    recObj.lang = 'ur-PK';
+    recObj.continuous = false;
+    recObj.interimResults = false;
+    let gotResult = false;
+
+    recObj.onresult = async (e) => {
+      gotResult = true;
+      recRunning = false;
+      btn.classList.remove('listening');
+      const speech = e.results[e.results.length-1][0].transcript.trim();
+      document.getElementById('listenTxt').textContent = `آپ نے کہا: "${speech}"`;
+      document.getElementById('listenTxt').className = 'listen-txt';
+      if(speech) await processVoiceResult(speech);
+    };
+    recObj.onerror = (e) => {
+      gotResult = true;
+      recRunning = false;
+      btn.classList.remove('listening');
+      document.getElementById('listenTxt').textContent = '';
+      setDetailStatus('تیار ہوں، حکم کریں!');
+    };
+    recObj.onend = () => {
+      if(!gotResult){ recRunning=false; btn.classList.remove('listening'); }
+    };
+    recObj.start();
+  }
+}
+
+async function processVoiceResult(speech){
+  setDetailStatus('جواب آ رہا ہے...');
+  document.getElementById('detailLoading').classList.add('show');
+  const mem = MEM.find(m=>m.id===currentId);
+  if(!ST[currentId]) ST[currentId]={note:'',done:false};
+
+  // Simple intent check for save
+  const saveWords = /یاد|رکھو|محفوظ|لکھو|نوٹ|ہے کہ|ہے یہ|رکھی|رکھا/;
+  const doneWords = /ہو گیا|کر لیا|مل گئی|مل گیا|دے دیا|ادا|وصول|بھیج/;
+  const deleteWords = /مٹا|حذف|ہٹا|ضرورت نہیں|بھول جا/;
+
+  if(saveWords.test(speech) || (!doneWords.test(speech) && !deleteWords.test(speech))){
+    ST[currentId].note = speech;
+    saveST();
+    refreshDetail();
+    renderList();
+  } else if(doneWords.test(speech)){
+    ST[currentId].done = true;
+    saveST();
+    refreshDetail();
+    renderList();
+  } else if(deleteWords.test(speech)){
+    ST[currentId].note = '';
+    ST[currentId].done = false;
+    saveST();
+    refreshDetail();
+    renderList();
+  }
 
   try {
-    // 1. Get GPS
-    const pos = await new Promise((res, rej) =>
-      navigator.geolocation.getCurrentPosition(res, rej, {timeout:10000, maximumAge:60000})
-    );
-    const lat = pos.coords.latitude.toFixed(4);
-    const lon = pos.coords.longitude.toFixed(4);
+    const reply = await askGemini(getDetailSystemPrompt(mem.n, ST[currentId].note), speech);
+    document.getElementById('detailLoading').classList.remove('show');
+    setDetailStatus('تیار ہوں، حکم کریں!');
+    speak(reply);
+    document.getElementById('listenTxt').textContent = reply;
+  } catch(e){
+    document.getElementById('detailLoading').classList.remove('show');
+    setDetailStatus('تیار ہوں، حکم کریں!');
+    speak('سمجھ گیا، یاد رکھا!');
+  }
+}
 
-    // 2. Get weather from Open-Meteo
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m&timezone=auto`;
-    const resp = await fetch(url);
-    if (!resp.ok) throw new Error('API error');
-    const data = await resp.json();
-    const temp = Math.round(data.current.temperature_2m);
+// ========== HOME MIC KEYBOARD ==========
+function homeKbMic(){
+  document.getElementById('homeKbText').value = '';
+  document.getElementById('homeKbModal').classList.add('show');
+  setTimeout(()=>document.getElementById('homeKbText').focus(), 350);
+}
+function homeKbClose(){
+  document.getElementById('homeKbModal').classList.remove('show');
+}
+async function homeKbSend(){
+  const txt = document.getElementById('homeKbText').value.trim();
+  homeKbClose();
+  if(!txt) return;
+  await homeAskAI(txt);
+}
 
-    // 3. Get location name (reverse geocode)
-    let locName = `${lat}, ${lon}`;
-    try {
-      const geo = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=ur`);
-      if (geo.ok) {
-        const gd = await geo.json();
-        const a = gd.address;
-        locName = a.city || a.town || a.village || a.county || a.state || locName;
-      }
-    } catch {}
+// ========== HOME VOICE MIC TOGGLE ==========
+function homeVoiceMic(){
+  if(homeRecRunning){
+    homeRecRunning = false;
+    if(homeRecObj) try{homeRecObj.stop();}catch(e){}
+    homeRecObj = null;
+    document.getElementById('homeSmallMic').classList.remove('listening');
+    document.getElementById('homeSmallLabel').textContent = '🎙️ بول کر پوچھیں';
+  } else {
+    if(!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) return;
+    homeRecRunning = true;
+    const btn = document.getElementById('homeSmallMic');
+    btn.classList.add('listening');
+    document.getElementById('homeSmallLabel').textContent = '🔴 بول رہے ہیں...';
 
-    // 4. Build result
-    const deviceId = getDeviceId();
-    const msg = getMessage(temp, deviceId);
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    homeRecObj = new SR();
+    homeRecObj.lang = 'ur-PK';
+    homeRecObj.continuous = false;
+    homeRecObj.interimResults = false;
+    let got = false;
 
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('dateVal').textContent = getDateString();
-    document.getElementById('tempNum').textContent = temp;
-    document.getElementById('tempIcon').textContent = getTempIcon(temp);
-    document.getElementById('locVal').textContent = locName;
-    document.getElementById('urduMsg').textContent = msg;
+    homeRecObj.onresult = async (e) => {
+      got = true;
+      homeRecRunning = false;
+      btn.classList.remove('listening');
+      document.getElementById('homeSmallLabel').textContent = '🎙️ بول کر پوچھیں';
+      const speech = e.results[e.results.length-1][0].transcript.trim();
+      if(speech) await homeAskAI(speech);
+    };
+    homeRecObj.onerror = ()=>{
+      got = true;
+      homeRecRunning = false;
+      btn.classList.remove('listening');
+      document.getElementById('homeSmallLabel').textContent = '🎙️ بول کر پوچھیں';
+    };
+    homeRecObj.onend = ()=>{
+      if(!got){ homeRecRunning=false; btn.classList.remove('listening'); document.getElementById('homeSmallLabel').textContent='🎙️ بول کر پوچھیں'; }
+    };
+    homeRecObj.start();
+  }
+}
 
-    // Update labels per lang
-    document.getElementById('dateLbl').textContent = T[lang].dateLbl;
-    document.getElementById('locLbl').textContent = T[lang].locLbl;
-    document.getElementById('msgLbl').textContent = T[lang].msgLbl;
-    document.getElementById('deviceBadge').textContent = T[lang].badge;
+async function homeAskAI(userMsg){
+  const replyEl = document.getElementById('homeAiReply');
+  const loadEl = document.getElementById('homeLoading');
+  replyEl.classList.remove('show');
+  loadEl.classList.add('show');
 
-    show('resultCard');
-    document.getElementById('refreshBtn').style.display = 'block';
-    document.getElementById('refreshText').textContent = T[lang].refresh;
-    document.getElementById('refreshBtn').className = 'refresh-btn' + (lang==='en'?' en':'');
+  const allNotes = MEM.map(m=>{
+    const s = ST[m.id];
+    return s?.note ? `- ${m.n}: ${s.note}` : null;
+  }).filter(Boolean).join('\n') || 'ابھی کوئی یادداشت نہیں';
 
-  } catch (e) {
-    document.getElementById('loading').style.display = 'none';
-    const isGps = e.code === 1; // permission denied
-    document.getElementById('errorText').textContent = isGps ? T[lang].errorGps : T[lang].error;
-    show('errorBox');
-    document.getElementById('refreshBtn').style.display = 'block';
-    document.getElementById('refreshText').textContent = T[lang].refresh;
+  try {
+    const reply = await askGemini(getHomeSystemPrompt(allNotes), userMsg);
+    loadEl.classList.remove('show');
+    replyEl.textContent = reply;
+    replyEl.classList.add('show');
+    speakSimple(reply);
+  } catch(e){
+    loadEl.classList.remove('show');
+    replyEl.textContent = 'معذرت، ابھی جواب نہیں آ سکا۔';
+    replyEl.classList.add('show');
+  }
+}
+
+// ========== DONE TOGGLE ==========
+function toggleDone(){
+  if(!ST[currentId]) ST[currentId]={note:'',done:false};
+  ST[currentId].done = !ST[currentId].done;
+  saveST();
+  refreshDetail();
+  renderList();
+  const msg = ST[currentId].done ? 'شاباش! کام مکمل کر دیا۔ 🎉' : 'ٹھیک ہے، واپس لے لیا۔';
+  speak(msg);
+}
+
+// ========== DELETE ==========
+function askDelete(){
+  const mem = MEM.find(m=>m.id===currentId);
+  document.getElementById('confTitle').textContent = `"${mem.n}" مٹائیں؟`;
+  document.getElementById('confOv').style.display='flex';
+}
+function closeConf(){ document.getElementById('confOv').style.display='none'; }
+function confirmDelete(){
+  if(ST[currentId]){ ST[currentId].note=''; ST[currentId].done=false; saveST(); }
+  closeConf();
+  refreshDetail();
+  renderList();
+  speak('ٹھیک ہے، مٹا دیا۔');
+}
+document.getElementById('confOv').addEventListener('click',function(e){if(e.target===this)closeConf();});
+
+// ========== NAVIGATION ==========
+function openDetail(id){
+  currentId = id;
+  const mem = MEM.find(m=>m.id===id);
+  document.getElementById('detailTitle').textContent = mem.n;
+  refreshDetail();
+  document.getElementById('screenList').classList.remove('active');
+  document.getElementById('screenDetail').classList.add('active');
+  document.getElementById('screenDetail').scrollTop = 0;
+}
+function goBack(){
+  if(window.speechSynthesis) speechSynthesis.cancel();
+  recRunning=false;
+  if(recObj) try{recObj.stop();}catch(e){}
+  recObj=null;
+  document.getElementById('smallMic').classList.remove('listening');
+  document.getElementById('listenTxt').textContent='';
+  document.getElementById('aiWaves').classList.remove('show');
+  document.getElementById('detailLoading').classList.remove('show');
+  document.getElementById('screenDetail').classList.remove('active');
+  document.getElementById('screenList').classList.add('active');
+  renderList();
+}
+
+// ========== REFRESH DETAIL ==========
+function refreshDetail(){
+  const s = ST[currentId]||{note:'',done:false};
+  const noteEl = document.getElementById('noteText');
+  const badge = document.getElementById('detailStatusBadge');
+  const doneBtn = document.getElementById('doneBtn');
+  const remBadge = document.getElementById('remBadge');
+
+  if(s.note){
+    noteEl.className='note-box-text';
+    noteEl.textContent=s.note;
+  } else {
+    noteEl.className='note-box-empty';
+    noteEl.textContent='ابھی کوئی یادداشت نہیں۔ نیچے مائک دبائیں۔';
   }
 
-  fetching = false;
+  if(s.remTime){
+    remBadge.textContent = `⏰ یاددہانی: ${s.remTime}`;
+    remBadge.style.display='block';
+  } else {
+    remBadge.style.display='none';
+  }
+
+  if(s.done){
+    badge.textContent='✅ کام ہو گیا';
+    badge.className='detail-status done-status';
+    doneBtn.textContent='↩ ابھی باقی ہے';
+    doneBtn.className='done-toggle undone';
+  } else {
+    badge.textContent='🕐 کام باقی ہے';
+    badge.className='detail-status';
+    doneBtn.textContent='✅ کام ہو گیا';
+    doneBtn.className='done-toggle';
+  }
 }
+
+function setDetailStatus(txt){ document.getElementById('detailStatus').textContent=txt; }
+
+// ========== RENDER LIST ==========
+function renderList(){
+  const w = document.getElementById('memList');
+  let h = '';
+  MEM.forEach(m=>{
+    const s = ST[m.id]||{};
+    const hasNote=!!(s.note);
+    const isDone=!!(s.done);
+    let badgeHtml='';
+    if(isDone) badgeHtml=`<span class="mbadge done">✅ ہو گیا</span>`;
+    else if(hasNote) badgeHtml=`<span class="mbadge saved">محفوظ</span>`;
+    h+=`<div class="mcard${hasNote?' has-note':''}${isDone?' is-done':''}" onclick="openDetail(${m.id})">
+      <div class="mnum">${m.id}</div>
+      <div class="minfo">
+        <div class="mname">${m.n}</div>
+        ${hasNote?`<div class="mnote-preview">${s.note}</div>`:''}
+      </div>
+      ${badgeHtml}
+      <div class="marrow">◀</div>
+    </div>`;
+  });
+  w.innerHTML=h;
+}
+
+renderList();
 </script>
 </body>
 </html>
