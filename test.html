@@ -1,32 +1,39 @@
 <!DOCTYPE html>
 <html>
-<body style="background:#111;color:white;padding:20px;font-family:arial">
+<body style="background:#111;color:white;padding:20px">
 
 <h2>آواز ٹیسٹ</h2>
 
-<textarea id="txt" rows="4" style="width:100%;font-size:18px;padding:10px" 
-placeholder="یہاں اردو لکھیں..."></textarea>
+<textarea id="txt" rows="4" style="width:100%;font-size:18px;padding:10px">السلام علیکم</textarea>
 
 <br><br>
 
-<button onclick="speak('ur-PK-UzmaNeural')" 
-style="padding:15px;background:pink;font-size:16px;margin:5px">
+<button onclick="speak('female')" style="padding:15px;background:pink;font-size:16px;margin:5px">
 عظمیٰ کی آواز
 </button>
 
-<button onclick="speak('ur-PK-AsadNeural')" 
-style="padding:15px;background:lightblue;font-size:16px;margin:5px">
+<button onclick="speak('male')" style="padding:15px;background:lightblue;font-size:16px;margin:5px">
 اسد کی آواز
 </button>
 
 <script>
-function speak(voice) {
+function speak(gender) {
   const text = document.getElementById('txt').value;
-  const audio = new Audio(
-    `https://tts.deno.dev/tts?voice=${voice}&text=${encodeURIComponent(text)}`
+  const voices = speechSynthesis.getVoices();
+  const msg = new SpeechSynthesisUtterance(text);
+  msg.lang = 'ur-PK';
+  
+  const urduVoice = voices.find(v => 
+    v.lang.includes('ur') && 
+    (gender === 'female' ? v.name.includes('f') || v.name.includes('F') : true)
   );
-  audio.play();
+  
+  if(urduVoice) msg.voice = urduVoice;
+  msg.rate = 0.9;
+  speechSynthesis.speak(msg);
 }
+
+speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
 </script>
 
 </body>
